@@ -7,8 +7,8 @@ var cmd = require('commander'),
 cmd.description("Get the file's metablock")
     .option("-o, --outfile [path]", "Outout file (defaults to STDOUT)")
     .option("-p, --prepend", "If specified, the metablock will be prepended to the file as opposed to overriding it")
-    .action(sourceFile => {
-        mod.getBlock(sourceFile, (err, contents) => {
+    .action(function (sourceFile) {
+        mod.getBlock(sourceFile, function (err, contents) {
             if (err) {
                 throw err;
             } else {
