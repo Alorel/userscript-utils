@@ -4,8 +4,7 @@
   "description": "Useful tools for developing userscripts",
   "preferGlobal": true,
   "scripts": {
-    "test": "mocha test",
-    "travis": "istanbul cover mocha test"
+    "test": "mocha test"
   },
   "bin": {
     "userscript-utils": "userscript-utilities"
