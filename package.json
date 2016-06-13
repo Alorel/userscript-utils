@@ -1,0 +1,25 @@
+{
+  "name": "userscript-utilities",
+  "version": "0.0.0",
+  "description": "Useful tools for developing userscripts",
+  "preferGlobal": true,
+  "scripts": {
+    "test": "mocha test"
+  },
+  "bin": {
+    "userscript-utils": "userscript-utilities"
+  },
+  "keywords": [
+    "userscript",
+    "utils"
+  ],
+  "dependencies": {
+    "commander": "^2.9"
+  },
+  "author": "Alorel",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "chai": "^3.5",
+    "mocha": "^2.5"
+  }
+}
