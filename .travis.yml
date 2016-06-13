@@ -4,7 +4,9 @@ node_js:
     - "6"
     - "5"
     - "4"
-script: npm test
+
+before_script: npm i istanbul
+script: npm run travis
 
 notifications:
   on_success: change
