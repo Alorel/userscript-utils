@@ -16,7 +16,15 @@
   "dependencies": {
     "commander": "^2.9"
   },
-  "author": "Alorel",
+  "author": "Alorel <a.molcanovas@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/Alorel/userscript-utils/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alorel/userscript-utils.git"
+  },
+  "homepage": "https://github.com/Alorel/userscript-utils#readme",
   "license": "GPL-3.0",
   "devDependencies": {
     "chai": "^3.5",

@@ -1,21 +1,34 @@
 "use strict";
 var chai = require('chai'),
     expect = chai.expect,
-    child_process = require('child_process'),
-    cwd = process.cwd(),
-    fs = require('fs'),
-    call = (...args)=> {
-        return child_process.spawnSync("../userscript-utilities get-metablock " + args.join(" "), {cwd: cwd})
-    };
+    mod = require('../lib/get-metablock');
 
-describe("GetMetablock", () => {
-    it("File doesn't exist", ()=> {
-        let err = call("node ../userscript-utilities get-metablock ./get-metablock-test.js", {cwd: cwd}).error;
-        expect(err.code).to.equal('ENOENT');
+describe("GetMetablock.getBlock", () => {
+    it("File doesn't exist", done => {
+        mod.getBlock('./package.jsonn', (err, contents) => {
+            //noinspection BadExpressionStatementJS
+            expect(err).to.not.be.null;
+            expect(err.code).to.equal("ENOENT");
+            done();
+        });
     });
 
-    // it("File has no metablock", ()=> {
-    //     let err = call('.').error;
-    //     console.log(err);
-    // });
+    it("File has no metablock", done => {
+        mod.getBlock('./package.json', (err, contents) => {
+            //noinspection BadExpressionStatementJS
+            expect(err).to.not.be.null;
+            expect(err.message).to.equal("Metadata block not found");
+            done();
+        });
+    });
+
+    it("Block @ top", done => {
+        mod.getBlock('./test/fixtures/userscript-top.js', (err, contents) => {
+            console.log({
+                err: err,
+                contents: contents
+            });
+            done();
+        });
+    });
 });

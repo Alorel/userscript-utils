@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+    - "0.10"
+    - "6"
+    - "5"
+    - "4"
+script: npm test
+
+notifications:
+  on_success: change
+  on_failure: always
+
+matrix:
+  fast_finish: true

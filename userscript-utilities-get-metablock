@@ -1,37 +1,19 @@
 #!/usr/bin/env node
 "use strict";
 
-var cmd = require('commander');
+var cmd = require('commander'),
+    mod = require('./lib/get-metablock');
 
 cmd.description("Get the file's metablock")
     .option("-o, --outfile [path]", "Outout file (defaults to STDOUT)")
     .option("-p, --prepend", "If specified, the metablock will be prepended to the file as opposed to overriding it")
     .action(sourceFile => {
-        var fs = require('fs'),
-            parseFile = (contents) => {
-                let regexStart = /^(\s*\/\/\s?==userscript)\s?==/im,
-                    regexEnd = /^(\s*\/\/\s?==\/userscript\s?==)/im;
-
-                let split1 = contents.split(regexEnd);
-
-                if (split1.length !== 3) {
-                    throw new Error("Metadata block not found");
-                }
-            },
-            readSrc = (err, contents) => {
-                if (err) {
-                    throw err;
-                } else {
-                    parseFile(contents);
-                }
-            },
-            accessSrc = err => {
-                if (err) {
-                    throw err;
-                } else {
-                    fs.readFile(sourceFile, 'utf8', readSrc);
-                }
-            };
-        fs.access(sourceFile, fs.R_OK, accessSrc);
+        mod.getBlock(sourceFile, (err, contents) => {
+            if (err) {
+                throw err;
+            } else {
+                console.log(contents);
+            }
+        });
     })
     .parse(process.argv);
