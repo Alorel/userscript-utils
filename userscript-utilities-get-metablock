@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-"use strict";
 
 var cmd = require('commander'),
     mod = require('./lib/get-metablock');

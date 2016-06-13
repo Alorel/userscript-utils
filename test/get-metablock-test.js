@@ -1,4 +1,3 @@
-"use strict";
 var chai = require('chai'),
     expect = chai.expect,
     mod = require('../lib/get-metablock');
