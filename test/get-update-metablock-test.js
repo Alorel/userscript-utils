@@ -125,6 +125,7 @@ describe("GetUpdateMetablock", function () {
         });
     });
     describe("From file", function () {
+        var FILE = "./test/fixtures/userscript-top.js";
         describe("Sync", function () {
             it("ENOENT", function () {
                 expect(function () {
@@ -137,19 +138,84 @@ describe("GetUpdateMetablock", function () {
                 }).to.throw(Error);
             });
             it("minimal", function () {
-                expect(mod.file.sync("./test/fixtures/userscript-top.js")).to.equal(mod.string.sync(help.top))
+                expect(mod.file.sync(FILE)).to.equal(mod.string.sync(help.top))
             });
             it("URL: update", function () {
-                expect(mod.file.sync("./test/fixtures/userscript-top.js"), true)
-                    .to.equal(mod.string.sync(help.top), true)
+                expect(mod.file.sync(FILE), true).to.equal(mod.string.sync(help.top), true)
             });
             it("URL: download", function () {
-                expect(mod.file.sync("./test/fixtures/userscript-top.js"), false, true)
-                    .to.equal(mod.string.sync(help.top), false, true)
+                expect(mod.file.sync(FILE), false, true).to.equal(mod.string.sync(help.top), false, true)
             });
             it("URL: [download, update[", function () {
-                expect(mod.file.sync("./test/fixtures/userscript-top.js"), true, true)
-                    .to.equal(mod.string.sync(help.top), true, true)
+                expect(mod.file.sync(FILE), true, true).to.equal(mod.string.sync(help.top), true, true)
+            });
+        });
+        describe("Async", function () {
+            it("ENOENT", function (d) {
+                mod.file.async("./package.jsonn", function (e, c) {
+                    //noinspection BadExpressionStatementJS
+                    expect(c).to.be.null;
+                    //noinspection BadExpressionStatementJS
+                    expect(e).to.not.be.null;
+
+                    expect(e.code).to.equal("ENOENT");
+                    d();
+                });
+            });
+            it("no metablock", function (d) {
+                mod.file.async("./package.json", function (e, c) {
+                    //noinspection BadExpressionStatementJS
+                    expect(c).to.be.null;
+                    //noinspection BadExpressionStatementJS
+                    expect(e).to.not.be.null;
+
+                    expect(e.message).to.equal("Metadata block not found");
+                    d();
+                });
+            });
+            it("minimal", function (d) {
+                mod.file.async(FILE, function (e, c) {
+                    //noinspection BadExpressionStatementJS
+                    expect(c).to.not.be.null;
+                    //noinspection BadExpressionStatementJS
+                    expect(e).to.be.null;
+
+                    expect(c).to.equal(mod.string.sync(help.top));
+                    d();
+                });
+            });
+            it("URL: update", function (d) {
+                mod.file.async(FILE, function (e, c) {
+                    //noinspection BadExpressionStatementJS
+                    expect(c).to.not.be.null;
+                    //noinspection BadExpressionStatementJS
+                    expect(e).to.be.null;
+
+                    expect(c).to.equal(mod.string.sync(help.top, true));
+                    d();
+                }, true);
+            });
+            it("URL: download", function (d) {
+                mod.file.async(FILE, function (e, c) {
+                    //noinspection BadExpressionStatementJS
+                    expect(c).to.not.be.null;
+                    //noinspection BadExpressionStatementJS
+                    expect(e).to.be.null;
+
+                    expect(c).to.equal(mod.string.sync(help.top, false, true));
+                    d();
+                }, false, true);
+            });
+            it("URL: [download, update]", function (d) {
+                mod.file.async(FILE, function (e, c) {
+                    //noinspection BadExpressionStatementJS
+                    expect(c).to.not.be.null;
+                    //noinspection BadExpressionStatementJS
+                    expect(e).to.be.null;
+
+                    expect(c).to.equal(mod.string.sync(help.top, true, true));
+                    d();
+                }, true, true);
             });
         });
     });
