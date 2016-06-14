@@ -7,7 +7,9 @@ node_js:
 cache:
   directories:
     - node_modules
-script: npm test
+script:
+  - npm test
+  - npm prune
 
 notifications:
   on_success: change

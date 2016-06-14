@@ -1,1 +1,4 @@
 * text=auto
+
+/jsdoc export-ignore
+/test export-ignore
