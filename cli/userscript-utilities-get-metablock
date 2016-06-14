@@ -4,15 +4,19 @@ var cmd = require('commander'),
     getBlock = require('..').getMetablock;
 
 cmd.description("Get the file's metablock")
-    .option("-o, --outfile [path]", "Outout file (defaults to STDOUT)")
-    .option("-p, --prepend", "If specified, the metablock will be prepended to the file as opposed to overriding it")
+    .option("-o, --outfile <path>", "Outout file (defaults to STDOUT)")
     .action(function (sourceFile) {
-        getGlock(sourceFile, function (err, contents) {
-            console.log(err);
+        getBlock(sourceFile, function (err, contents) {
             if (err) {
                 throw err;
+            } else if (cmd.outfile) {
+                require('fs').writeFile(cmd.outfile, contents, 'utf8', function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                });
             } else {
-                console.log(contents);
+                process.stdout.write(contents);
             }
         });
     })
