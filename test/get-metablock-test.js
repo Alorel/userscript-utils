@@ -1,6 +1,6 @@
 var chai = require('chai'),
     expect = chai.expect,
-    mod = require('../lib/get-metablock'),
+    mod = require('..').block,
     expectedMetablock = "// ==UserScript==\n\
 // @name		Name\n\
 // @namespace	namespace\n\
