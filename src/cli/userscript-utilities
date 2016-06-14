@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
 require('commander')
-    .description(require('../package.json').description)
-    .command("get-metablock <sourceFile> [path]", "Get the file's metablock")
+    .description(require('../../package.json').description)
+    .command("get-metablock", "Get an entire metadata block")
     .parse(process.argv);
