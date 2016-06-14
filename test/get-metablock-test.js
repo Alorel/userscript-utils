@@ -1,5 +1,5 @@
 var expect = require('chai').expect,
-    mod = require('..').getMetablock,
+    mod = require('../src/index').getMetablock,
     meta = require('./fixtures/helper'),
     rawLength = meta.raw.split(/\n/).length;
 

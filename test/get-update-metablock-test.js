@@ -1,5 +1,5 @@
 var expect = require('chai').expect,
-    mod = require('..').getUpdateMetablock,
+    mod = require('../src/index').getUpdateMetablock,
     help = require('./fixtures/helper');
 
 describe("GetUpdateMetablock", function () {
