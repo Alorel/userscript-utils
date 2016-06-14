@@ -8,38 +8,43 @@ describe("CLI", function () {
     var script = './src/cli/userscript-utilities';
 
     describe('Index', function () {
-        var halp = fs.readFileSync(require.resolve('../src/cli/help/index.txt'), 'utf8');
+        describe("Help", function () {
+            var halp = fs.readFileSync(require.resolve('../src/cli/help/index.txt'), 'utf8');
 
-        it("Help: no arg", function () {
-            expect(spawn('node', [script], {encoding: 'utf8'}).stdout)
-                .to.equal(halp);
-        });
-        it("Help: -h", function () {
-            expect(spawn('node', [script, '-h'], {encoding: 'utf8'}).stdout)
-                .to.equal(halp);
-        });
-        it("Help: --help", function () {
-            expect(spawn('node', [script, '--help'], {encoding: 'utf8'}).stdout)
-                .to.equal(halp);
+            it("no arg", function () {
+                expect(spawn('node', [script], {encoding: 'utf8'}).stdout)
+                    .to.equal(halp);
+            });
+            it("-h", function () {
+                expect(spawn('node', [script, '-h'], {encoding: 'utf8'}).stdout)
+                    .to.equal(halp);
+            });
+            it("--help", function () {
+                expect(spawn('node', [script, '--help'], {encoding: 'utf8'}).stdout)
+                    .to.equal(halp);
+            });
         });
     });
 
     describe("get-metablock", function () {
-        var halp = fs.readFileSync(require.resolve('../src/cli/help/get-metablock.txt'), 'utf8'),
-            stdin = fs.readFileSync(inFile, 'utf8'),
+        var stdin = fs.readFileSync(inFile, 'utf8'),
             subscript = "get-metablock";
 
-        it("Help: no arg", function () {
-            expect(spawn('node', [script, subscript], {encoding: 'utf8'}).stdout)
-                .to.equal(halp);
-        });
-        it("Help: -h", function () {
-            expect(spawn('node', [script, subscript, '-h'], {encoding: 'utf8'}).stdout)
-                .to.equal(halp);
-        });
-        it("Help: --help", function () {
-            expect(spawn('node', [script, subscript, '--help'], {encoding: 'utf8'}).stdout)
-                .to.equal(halp);
+        describe("Help", function () {
+            var halp = fs.readFileSync(require.resolve('../src/cli/help/get-metablock.txt'), 'utf8');
+
+            it("no arg", function () {
+                expect(spawn('node', [script, subscript], {encoding: 'utf8'}).stdout)
+                    .to.equal(halp);
+            });
+            it("-h", function () {
+                expect(spawn('node', [script, subscript, '-h'], {encoding: 'utf8'}).stdout)
+                    .to.equal(halp);
+            });
+            it("--help", function () {
+                expect(spawn('node', [script, subscript, '--help'], {encoding: 'utf8'}).stdout)
+                    .to.equal(halp);
+            });
         });
 
         describe("To STDOUT", function () {
