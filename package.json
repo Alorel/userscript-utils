@@ -16,8 +16,7 @@
     "utils"
   ],
   "dependencies": {
-    "async": "^2.0.0-alpha.0",
-    "commander": "^2.9"
+    "async": "^2.0.0-alpha.0"
   },
   "author": "Alorel <a.molcanovas@gmail.com>",
   "bugs": {
@@ -31,6 +30,7 @@
   "license": "GPL-3.0",
   "devDependencies": {
     "chai": "^3.5",
+    "minimist": "^1.2.0",
     "mocha": "^2.5"
   }
 }

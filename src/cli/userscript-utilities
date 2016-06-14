@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
-require('commander')
-    .description(require('../../package.json').description)
-    .command("get-metablock", "Get an entire metadata block")
-    .parse(process.argv);
+var argv = require('minimist')(process.argv.slice(2), {
+    alias: {
+        h: 'help'
+    }
+});
+
+console.log(argv);
