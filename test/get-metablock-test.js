@@ -1,6 +1,6 @@
 var chai = require('chai'),
     expect = chai.expect,
-    mod = require('..').block,
+    mod = require('..').getMetablock,
     expectedMetablock = "// ==UserScript==\n\
 // @name		Name\n\
 // @namespace	namespace\n\
@@ -11,9 +11,9 @@ var chai = require('chai'),
 // @grant 		none\n\
 // ==/UserScript==";
 
-describe("GetMetablock.getBlock", function () {
+describe("GetMetablock", function () {
     it("File doesn't exist", function (done) {
-        mod.getBlock('./package.jsonn', function (err) {
+        mod('./package.jsonn', function (err) {
             //noinspection BadExpressionStatementJS
             expect(err).to.not.be.null;
             expect(err.code).to.equal("ENOENT");
@@ -22,16 +22,17 @@ describe("GetMetablock.getBlock", function () {
     });
 
     it("File has no metablock", function (done) {
-        mod.getBlock('./package.json', function (err, contents) {
+        mod('./package.json', function (err, contents) {
             //noinspection BadExpressionStatementJS
             expect(err).to.not.be.null;
-            expect(err.message).to.equal("Metadata block not found");
+            expect(err.message).to.equal("Metadata getMetablock not found");
             done();
         });
     });
 
     it("Block @ top", function (done) {
-        mod.getBlock('./test/fixtures/userscript-top.js', function (err, contents) {
+        mod('./test/fixtures/userscript-top.js', function (err, contents) {
+            //noinspection BadExpressionStatementJS
             expect(err).to.be.null;
 
             expect(expectedMetablock.split(/\n/).length).to.equal(contents.split(/\n/).length);
@@ -40,7 +41,8 @@ describe("GetMetablock.getBlock", function () {
     });
 
     it("Block @ mid", function (done) {
-        mod.getBlock('./test/fixtures/userscript-mid.js', function (err, contents) {
+        mod('./test/fixtures/userscript-mid.js', function (err, contents) {
+            //noinspection BadExpressionStatementJS
             expect(err).to.be.null;
             expect(expectedMetablock.split(/\n/).length).to.equal(contents.split(/\n/).length);
             done();
