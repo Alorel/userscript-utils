@@ -49,5 +49,87 @@ describe("GetUpdateMetablock", function () {
                 });
             });
         });
+        describe("Async", function () {
+            describe("Valid", function () {
+                it("minimal", function (d) {
+                    mod.string.async(raw, function (e, meta) {
+                        //noinspection BadExpressionStatementJS
+                        expect(e).to.be.null;
+                        //noinspection BadExpressionStatementJS
+                        expect(meta).to.not.be.null;
+
+                        meta = meta.toLowerCase();
+
+                        expect(meta.split(/\n/).length).to.equal(5);
+                        expect(meta.indexOf("@updateurl")).to.equal(-1);
+                        expect(meta.indexOf("@downloadurl")).to.equal(-1);
+                        d();
+                    });
+                });
+                it("URL: update", function (d) {
+                    mod.string.async(raw, function (e, meta) {
+                        //noinspection BadExpressionStatementJS
+                        expect(e).to.be.null;
+                        //noinspection BadExpressionStatementJS
+                        expect(meta).to.not.be.null;
+
+                        meta = meta.toLowerCase();
+
+                        expect(meta.split(/\n/).length).to.equal(6);
+                        expect(meta.indexOf("@updateurl")).to.not.equal(-1);
+                        expect(meta.indexOf("@downloadurl")).to.equal(-1);
+                        d();
+                    }, true);
+                });
+                it("URL: download", function (d) {
+                    mod.string.async(raw, function (e, meta) {
+                        //noinspection BadExpressionStatementJS
+                        expect(e).to.be.null;
+                        //noinspection BadExpressionStatementJS
+                        expect(meta).to.not.be.null;
+
+                        meta = meta.toLowerCase();
+
+                        expect(meta.split(/\n/).length).to.equal(6);
+                        expect(meta.indexOf("@updateurl")).to.equal(-1);
+                        expect(meta.indexOf("@downloadurl")).to.not.equal(-1);
+                        d();
+                    }, false, true);
+                });
+                it("URL: [download, update]", function (d) {
+                    mod.string.async(raw, function (e, meta) {
+                        //noinspection BadExpressionStatementJS
+                        expect(e).to.be.null;
+                        //noinspection BadExpressionStatementJS
+                        expect(meta).to.not.be.null;
+
+                        meta = meta.toLowerCase();
+
+                        expect(meta.split(/\n/).length).to.equal(7);
+                        expect(meta.indexOf("@updateurl")).to.not.equal(-1);
+                        expect(meta.indexOf("@downloadurl")).to.not.equal(-1);
+                        d();
+                    }, true, true);
+                });
+            });
+            describe("Invalid", function () {
+                it("no metablock", function (d) {
+                    mod.string.async("foo", function (e) {
+                        //noinspection BadExpressionStatementJS
+                        expect(e).to.not.be.null;
+                        expect(e.message).to.equal("Metablock not found");
+                        d();
+                    });
+                });
+                it("null", function (d) {
+                    mod.string.async(null, function (e) {
+                        //noinspection BadExpressionStatementJS
+                        expect(e).to.not.be.null;
+                        expect(e.message).to.equal("Cannot read property 'split' of null");
+                        d();
+                    });
+                });
+            });
+        });
     });
 });
