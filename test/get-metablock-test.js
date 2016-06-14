@@ -77,6 +77,26 @@ describe("GetMetablock", function () {
             });
         });
     });
+    describe("From file", function () {
+        describe("Sync", function () {
+            it("ENOENT", function () {
+                expect(function () {
+                    mod.file.sync("./package.jsonn");
+                }).to.throw(Error);
+            });
+            it("No metablock", function () {
+                expect(function () {
+                    mod.file.sync("./package.json");
+                }).to.throw(Error);
+            });
+            it("Top", function () {
+                expect(mod.file.sync('./test/fixtures/userscript-top.js')).to.equal(mod.string.sync(meta.top));
+            });
+            it("Mid", function () {
+                expect(mod.file.sync('./test/fixtures/userscript-mid.js')).to.equal(mod.string.sync(meta.mid));
+            });
+        });
+    });
     // it("File doesn't exist", function (done) {
     //     mod('./package.jsonn', function (err) {
     //         //noinspection BadExpressionStatementJS
