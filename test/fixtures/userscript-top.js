@@ -6,6 +6,8 @@
 // @include		https://gist.github.com/*
 // @version		6.6.6
 // @grant 		none
+// @updateURL  https://foo
+// @downloadURL  https://bar
 // ==/UserScript==
 
 //script

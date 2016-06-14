@@ -6,6 +6,8 @@
 // @description	My desc
 // @include		https://github.com/*
 // @include		https://gist.github.com/*
+// @updateURL  https://foo
+// @downloadURL  https://bar
 // @version		6.6.6
 // @grant 		none
 // ==/UserScript==
