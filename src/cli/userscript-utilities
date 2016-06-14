@@ -1,9 +1,36 @@
 #!/usr/bin/env node
 
-var argv = require('minimist')(process.argv.slice(2), {
-    alias: {
-        h: 'help'
-    }
-});
+process.title = "userscript-utils";
 
-console.log(argv);
+var argv = require('minimist')(process.argv.slice(2), {
+        alias: {
+            h: 'help'
+        }
+    }),
+    fs = require('fs'),
+    help = function () {
+        fs.readFile(require.resolve('./help/index.txt'), 'utf8', function (e, o) {
+            if (e) {
+                process.stderr.write(e.message);
+            } else {
+                process.stdout.write(o);
+            }
+        });
+    };
+
+if (argv._.length) {
+    var module = './cmd/' + argv._.shift().toLowerCase(),
+        ok = false;
+
+    try {
+        ok = require.resolve(module);
+    } catch (e) {
+        help();
+    }
+
+    if (ok) {
+        require(module)();
+    }
+} else {
+    help();
+}

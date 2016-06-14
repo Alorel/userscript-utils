@@ -1,0 +1,10 @@
+
+    Userscript utilities
+
+    Usage: userscript-utils <cmd> [options]
+    Pass -h or --help to any command to display command-specific help
+
+    Commands:
+
+        get-metablock   - Retrieve the entire metadata block
+        get-updateblock - Retrieve a shortened metadata block for .meta.js files

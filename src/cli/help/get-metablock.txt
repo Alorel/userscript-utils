@@ -1,0 +1,10 @@
+
+    Retrieve the entire metadata block
+
+    Usage: userscript-utils get-metablock [options]
+
+    Commands:
+
+        -h, --help      - Display this help
+        -i, --infile    - Get contents from a file as opposed to STDIN
+        -o, --outfile   - Output result to a file as opposed to STDOUT

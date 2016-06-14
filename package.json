@@ -5,7 +5,8 @@
   "preferGlobal": true,
   "scripts": {
     "test": "mocha test -c --recursive",
-    "test-watch": "mocha test --recursive -w -R min"
+    "test-watch": "mocha test --recursive -w -R min",
+    "test-min": "mocha test --recursive -R min"
   },
   "bin": {
     "userscript-utils": "./src/cli/userscript-utilities"
@@ -16,7 +17,8 @@
     "utils"
   ],
   "dependencies": {
-    "async": "^2.0.0-alpha.0"
+    "async": "^2.0.0-alpha.0",
+    "get-stdin": "^5.0.1"
   },
   "author": "Alorel <a.molcanovas@gmail.com>",
   "bugs": {

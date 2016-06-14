@@ -1,0 +1,63 @@
+#!/usr/bin/env node
+
+var argv = require('minimist')(process.argv.slice(2), {
+        alias: {
+            h: 'help',
+            i: 'infile',
+            o: 'outfile'
+        }
+    }),
+    mod = require('../../lib/get-metablock'),
+    stdin = require('get-stdin'),
+    fs = require('fs'),
+    help = function () {
+        fs.readFile(require.resolve('../help/get-metablock.txt'), 'utf8', function (e, o) {
+            if (e) {
+                process.stderr.write(e.message);
+            } else {
+                process.stdout.write(o);
+            }
+        });
+    },
+    doOut = function (result) {
+        if (argv.outfile) {
+            fs.writeFile(argv.outfile, result, 'utf8', function (e) {
+                if (e) {
+                    process.stderr.write(e.message);
+                    process.exit(1);
+                }
+            });
+        } else {
+            process.stdout.write(result);
+        }
+    },
+    exp = function () {
+        if (argv.help) {
+            help();
+        } else if (argv.infile) {
+            mod.file.async(argv.infile, function (e, c) {
+                if (e) {
+                    process.stderr.write(e.message);
+                } else {
+                    doOut(c);
+                }
+            });
+        } else {
+            stdin().then(function (input) {
+                if (input) {
+                    mod.string.async(input, function (e, c) {
+                        if (e) {
+                            process.stderr.write(e.message);
+                            process.exit(1);
+                        } else {
+                            doOut(c);
+                        }
+                    });
+                } else {
+                    help();
+                }
+            });
+        }
+    };
+
+module.exports = exp;
