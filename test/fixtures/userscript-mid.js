@@ -12,6 +12,4 @@
 // @grant 		none
 // ==/UserScript==
 
-//script
-
 //Aliquam porttitor, tellus et efficitur bibendum, nisi neque feugiat nulla, et auctor nulla lacus quis turpis. Aenean mi orci, finibus nec placerat at, euismod at augue. Ut luctus lectus id tortor pharetra vehicula. Curabitur eget malesuada eros. Aenean vehicula congue ipsum nec lobortis. Aliquam sollicitudin nisi eu mauris dictum, et aliquam quam iaculis. Praesent consectetur, nisl eu laoreet condimentum, est tortor aliquam orci, ac porta libero lorem sit amet orci. Nullam in mollis magna. Nulla facilisi. Pellentesque vitae viverra mauris. Nam lobortis nunc a purus sollicitudin, quis feugiat odio gravida. Donec mattis pharetra sem non porta.

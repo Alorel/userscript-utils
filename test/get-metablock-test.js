@@ -63,7 +63,9 @@ describe("GetMetablock", function () {
                 mod.string.async(null, function (err, contents) {
                     //noinspection BadExpressionStatementJS
                     expect(contents).to.be.null;
-                    expect(err).to.be.an.instanceof(Error);
+                    //noinspection BadExpressionStatementJS
+                    expect(err).to.not.be.null;
+                    expect(err.message).to.equal("Cannot read property 'split' of null");
                     done();
                 });
             });
@@ -71,7 +73,7 @@ describe("GetMetablock", function () {
                 mod.string.async("foo", function (err, contents) {
                     //noinspection BadExpressionStatementJS
                     expect(contents).to.be.null;
-                    expect(err).to.be.an.instanceof(Error);
+                    expect(err.message).to.equal("Metadata block not found");
                     done();
                 });
             });
@@ -96,41 +98,39 @@ describe("GetMetablock", function () {
                 expect(mod.file.sync('./test/fixtures/userscript-mid.js')).to.equal(mod.string.sync(meta.mid));
             });
         });
+        describe("Async", function () {
+            it("ENOENT", function (done) {
+                mod.file.async("./package.jsonn", function (err) {
+                    //noinspection BadExpressionStatementJS
+                    expect(err).to.not.be.null;
+                    expect(err.code).to.equal("ENOENT");
+                    done();
+                });
+            });
+            it("No metablock", function (done) {
+                mod.file.async("./package.json", function (err) {
+                    //noinspection BadExpressionStatementJS
+                    expect(err).to.not.be.null;
+                    expect(err.message).to.equal("Metadata block not found");
+                    done();
+                });
+            });
+            it("Top", function (done) {
+                mod.file.async('./test/fixtures/userscript-top.js', function (err, contents) {
+                    //noinspection BadExpressionStatementJS
+                    expect(err).to.be.null;
+                    expect(contents).to.equal(mod.string.sync(meta.top));
+                    done();
+                });
+            });
+            it("Mid", function (done) {
+                mod.file.async('./test/fixtures/userscript-mid.js', function (err, contents) {
+                    //noinspection BadExpressionStatementJS
+                    expect(err).to.be.null;
+                    expect(contents).to.equal(mod.string.sync(meta.mid));
+                    done();
+                });
+            });
+        });
     });
-    // it("File doesn't exist", function (done) {
-    //     mod('./package.jsonn', function (err) {
-    //         //noinspection BadExpressionStatementJS
-    //         expect(err).to.not.be.null;
-    //         expect(err.code).to.equal("ENOENT");
-    //         done();
-    //     });
-    // });
-    //
-    // it("File has no metablock", function (done) {
-    //     mod('./package.json', function (err, contents) {
-    //         //noinspection BadExpressionStatementJS
-    //         expect(err).to.not.be.null;
-    //         expect(err.message).to.equal("Metadata getMetablock not found");
-    //         done();
-    //     });
-    // });
-    //
-    // it("Block @ top", function (done) {
-    //     mod('./test/fixtures/userscript-top.js', function (err, contents) {
-    //         //noinspection BadExpressionStatementJS
-    //         expect(err).to.be.null;
-    //
-    //         expect(expectedMetablock.split(/\n/).length).to.equal(contents.split(/\n/).length);
-    //         done();
-    //     });
-    // });
-    //
-    // it("Block @ mid", function (done) {
-    //     mod('./test/fixtures/userscript-mid.js', function (err, contents) {
-    //         //noinspection BadExpressionStatementJS
-    //         expect(err).to.be.null;
-    //         expect(expectedMetablock.split(/\n/).length).to.equal(contents.split(/\n/).length);
-    //         done();
-    //     });
-    // });
 });
