@@ -31,6 +31,51 @@ describe("GetMetablock", function () {
                 }).to.throw(Error);
             });
         });
+        describe("Async", function () {
+            it("Raw", function (done) {
+                mod.string.async(meta.raw, function (err, contents) {
+                    //noinspection BadExpressionStatementJS
+                    expect(err).to.be.null;
+                    expect(contents.split(/\n/).length).to.equal(rawLength);
+                    done();
+                });
+                expect(mod.string.sync(meta.raw).split(/\n/).length).to.equal(rawLength);
+            });
+            it("Top", function (done) {
+                mod.string.async(meta.top, function (err, contents) {
+                    //noinspection BadExpressionStatementJS
+                    expect(err).to.be.null;
+                    expect(contents.split(/\n/).length).to.equal(rawLength);
+                    done();
+                });
+                expect(mod.string.sync(meta.raw).split(/\n/).length).to.equal(rawLength);
+            });
+            it("Mid", function (done) {
+                mod.string.async(meta.mid, function (err, contents) {
+                    //noinspection BadExpressionStatementJS
+                    expect(err).to.be.null;
+                    expect(contents.split(/\n/).length).to.equal(rawLength);
+                    done();
+                });
+                expect(mod.string.sync(meta.raw).split(/\n/).length).to.equal(rawLength);
+            });
+            it("null", function (done) {
+                mod.string.async(null, function (err, contents) {
+                    //noinspection BadExpressionStatementJS
+                    expect(contents).to.be.null;
+                    expect(err).to.be.an.instanceof(Error);
+                    done();
+                });
+            });
+            it("no metablock", function (done) {
+                mod.string.async("foo", function (err, contents) {
+                    //noinspection BadExpressionStatementJS
+                    expect(contents).to.be.null;
+                    expect(err).to.be.an.instanceof(Error);
+                    done();
+                });
+            });
+        });
     });
     // it("File doesn't exist", function (done) {
     //     mod('./package.jsonn', function (err) {
