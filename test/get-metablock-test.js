@@ -1,6 +1,15 @@
 var chai = require('chai'),
     expect = chai.expect,
-    mod = require('../lib/get-metablock');
+    mod = require('../lib/get-metablock'),
+    expectedMetablock = "// ==UserScript==\n\
+// @name		Name\n\
+// @namespace	namespace\n\
+// @description	My desc\n\
+// @include		https://github.com/*\n\
+// @include		https://gist.github.com/*\n\
+// @version		6.6.6\n\
+// @grant 		none\n\
+// ==/UserScript==";
 
 describe("GetMetablock.getBlock", function () {
     it("File doesn't exist", function (done) {
@@ -23,10 +32,17 @@ describe("GetMetablock.getBlock", function () {
 
     it("Block @ top", function (done) {
         mod.getBlock('./test/fixtures/userscript-top.js', function (err, contents) {
-            console.log({
-                err: err,
-                contents: contents
-            });
+            expect(err).to.be.null;
+
+            expect(expectedMetablock.split(/\n/).length).to.equal(contents.split(/\n/).length);
+            done();
+        });
+    });
+
+    it("Block @ mid", function (done) {
+        mod.getBlock('./test/fixtures/userscript-mid.js', function (err, contents) {
+            expect(err).to.be.null;
+            expect(expectedMetablock.split(/\n/).length).to.equal(contents.split(/\n/).length);
             done();
         });
     });

@@ -7,8 +7,9 @@
     "test": "mocha test"
   },
   "bin": {
-    "userscript-utils": "userscript-utilities"
+    "userscript-utils": "./cli/userscript-utilities"
   },
+  "main": "./index.js",
   "keywords": [
     "userscript",
     "utils"
