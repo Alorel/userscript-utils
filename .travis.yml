@@ -6,8 +6,7 @@ node_js:
   - "4"
 
 before_script: npm link
-script:
-  - bash -c 'if [[ "$TRAVIS_NODE_VERSION" != *"0.12"* ]]; then npm test; else npm run test012; fi;'
+script: npm test
 
 notifications:
   on_success: change

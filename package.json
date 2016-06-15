@@ -4,8 +4,7 @@
   "description": "Useful tools for developing userscripts",
   "preferGlobal": true,
   "scripts": {
-    "test": "mocha-parallel-tests test -c --recursive --max-parallel 100",
-    "test012": "node node_modules/mocha/bin/_mocha test -c --recursive",
+    "test": "mocha test -c --recursive --max-parallel 100",
     "test-watch": "mocha-parallel-tests test --recursive -w -R min",
     "test-min": "mocha-parallel-tests test --recursive -R progress"
   },
@@ -45,6 +44,6 @@
   "devDependencies": {
     "chai": "^3.5",
     "minimist": "^1.2",
-    "mocha-parallel-tests": "^0.5"
+    "mocha": "^2.5"
   }
 }
