@@ -1,6 +1,6 @@
 {
-  "name": "userscript-utilities",
-  "version": "0.0.0",
+  "name": "userscript-utils",
+  "version": "1.0.0-beta.1",
   "description": "Useful tools for developing userscripts",
   "preferGlobal": true,
   "scripts": {
@@ -17,7 +17,8 @@
   "main": "./src/index.js",
   "keywords": [
     "userscript",
-    "utils"
+    "utils",
+    "utilities"
   ],
   "dependencies": {
     "async": "^2.0.0-alpha.0",
