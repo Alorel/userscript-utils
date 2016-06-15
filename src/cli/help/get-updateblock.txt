@@ -5,6 +5,8 @@
 
     Options:
 
-        -h, --help      - Display this help
-        -i, --infile    - Get contents from a file as opposed to STDIN
-        -o, --outfile   - Output result to a file as opposed to STDOUT
+        -h, --help          - Display this help
+        -i, --infile        - Get contents from a file as opposed to STDIN
+        -o, --outfile       - Output result to a file as opposed to STDOUT
+        -u, --updateurl     - Include the @updateURL tag in the output
+        -d, --downloadurl   - Include the @downloadURL tag in the output

@@ -100,4 +100,6 @@ describe("CLI", function () {
             });
         });
     });
+
+    // describe("get-updateblock",function(){});
 });

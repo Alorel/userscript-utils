@@ -4,7 +4,9 @@ var argv = require('minimist')(process.argv.slice(2), {
         alias: {
             h: 'help',
             i: 'infile',
-            o: 'outfile'
+            o: 'outfile',
+            u: 'updateurl',
+            d: 'downloadurl'
         }
     }),
     mod = require('../../lib/get-update-metablock'),
@@ -13,6 +15,9 @@ var argv = require('minimist')(process.argv.slice(2), {
     helpfile = require('path').basename(__filename);
 
 module.exports = function () {
+    var update = argv.u ? true : false,
+        download = argv.d ? true : false;
+
     if (argv.help) {
         common.help(helpfile);
     } else if (argv.infile) {
@@ -22,7 +27,7 @@ module.exports = function () {
             } else {
                 common.doOut(argv, c);
             }
-        });
+        }, update, download);
     } else {
         stdin().then(function (input) {
             if (input) {
@@ -33,7 +38,7 @@ module.exports = function () {
                     } else {
                         common.doOut(argv, c);
                     }
-                });
+                }, update, download);
             } else {
                 common.help(helpfile);
             }
