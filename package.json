@@ -5,7 +5,6 @@
   "preferGlobal": true,
   "scripts": {
     "test": "mocha test -c --recursive",
-    "travis": "istanbul --config .istanbul.yml cover mocha test -c --recursive",
     "test-watch": "mocha test --recursive -w -R min",
     "test-min": "mocha test --recursive -R min"
   },
