@@ -5,8 +5,9 @@
   "preferGlobal": true,
   "scripts": {
     "test": "mocha-parallel-tests test -c --recursive --max-parallel 100",
-    "test-watch": "mocha test --recursive -w -R min",
-    "test-min": "mocha test --recursive -R progress"
+    "test012": "mocha test -c --recursive",
+    "test-watch": "mocha-parallel-tests test --recursive -w -R min",
+    "test-min": "mocha-parallel-tests test --recursive -R progress"
   },
   "engines": {
     "node": ">=0.12"

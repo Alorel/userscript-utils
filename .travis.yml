@@ -1,12 +1,13 @@
 language: node_js
 node_js:
-    - "6"
-    - "0.12"
-    - "5"
-    - "4"
+  - "6"
+  - "0.12"
+  - "5"
+  - "4"
 
 before_script: npm link
-script: npm test
+script:
+  - bash -c 'if [[ "$TRAVIS_NODE_VERSION" != *"0.12"* ]]; then npm test; else npm run test012; fi;'
 
 notifications:
   on_success: change
