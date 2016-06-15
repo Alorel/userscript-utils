@@ -15,7 +15,7 @@ before_script:
   - npm link
 
 script:
-  - npm test
+  - npm run travis
 
 notifications:
   on_success: change
