@@ -1,7 +1,7 @@
 
-    Retrieve the entire metadata block
+    Retrieve the shortened metadata block required for .meta.js files and @updateURL
 
-    Usage: userscript-utils get-metablock [options]
+    Usage: userscript-utils get-updateblock [options]
 
     Options:
 

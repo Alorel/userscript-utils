@@ -7,7 +7,7 @@ var argv = require('minimist')(process.argv.slice(2), {
             o: 'outfile'
         }
     }),
-    mod = require('../../lib/get-metablock'),
+    mod = require('../../lib/get-update-metablock'),
     stdin = require('get-stdin'),
     common = require('../common'),
     helpfile = require('path').basename(__filename);
