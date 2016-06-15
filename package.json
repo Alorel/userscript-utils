@@ -5,8 +5,12 @@
   "preferGlobal": true,
   "scripts": {
     "test": "mocha test -c --recursive",
+    "prepublish": "npm test",
     "test-watch": "mocha test --recursive -w -R min",
     "test-min": "mocha test --recursive -R min"
+  },
+  "engines": {
+    "node": ">=0.12"
   },
   "bin": {
     "userscript-utils": "./src/cli/userscript-utilities"
@@ -18,9 +22,17 @@
   ],
   "dependencies": {
     "async": "^2.0.0-alpha.0",
-    "get-stdin": "^5.0.1"
+    "get-stdin": "^5.0"
   },
-  "author": "Alorel <a.molcanovas@gmail.com>",
+  "author": {
+    "name": "Alorel",
+    "url": "https://github.com/Alorel",
+    "email": "a.molcanovas@gmail.com"
+  },
+  "directories": {
+    "src": "./src",
+    "lib": "./src/lib"
+  },
   "bugs": {
     "url": "https://github.com/Alorel/userscript-utils/issues"
   },
@@ -29,10 +41,10 @@
     "url": "git+https://github.com/Alorel/userscript-utils.git"
   },
   "homepage": "https://github.com/Alorel/userscript-utils#readme",
-  "license": "GPL-3.0",
+  "license": "LGPL-2.1 ",
   "devDependencies": {
     "chai": "^3.5",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2",
     "mocha": "^2.5"
   }
 }
