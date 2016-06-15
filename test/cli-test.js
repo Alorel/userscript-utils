@@ -1,27 +1,37 @@
 var expect = require('chai').expect,
-    spawn = require('child_process').spawnSync,
+    exec = require('child_process').execSync,
     inFile = require.resolve('./fixtures/userscript-mid.js'),
+    sep = require('path').sep,
     inProcessed = require('../src/lib/get-metablock').file.sync(inFile),
-    fs = require('fs');
+    fs = require('fs'),
+    /**
+     * @param {...string} args
+     * @returns {string}
+     */
+    script = function () {
+        var cmd = "userscript-utils",
+            i = 0;
+        for (; i < arguments.length; i++) {
+            cmd += ' "' + arguments[i] + '"';
+        }
+        return cmd;
+    };
 
 describe("CLI", function () {
-    var script = './src/cli/userscript-utilities';
+    this.timeout(10000);
 
     describe('Index', function () {
         describe("Help", function () {
             var halp = fs.readFileSync(require.resolve('../src/cli/help/index.txt'), 'utf8');
 
             it("no arg", function () {
-                expect(spawn('node', [script], {encoding: 'utf8'}).stdout)
-                    .to.equal(halp);
+                expect(exec(script()).toString()).to.equal(halp);
             });
             it("-h", function () {
-                expect(spawn('node', [script, '-h'], {encoding: 'utf8'}).stdout)
-                    .to.equal(halp);
+                expect(exec(script(this.test.title)).toString()).to.equal(halp);
             });
             it("--help", function () {
-                expect(spawn('node', [script, '--help'], {encoding: 'utf8'}).stdout)
-                    .to.equal(halp);
+                expect(exec(script(this.test.title)).toString()).to.equal(halp);
             });
         });
     });
@@ -34,72 +44,51 @@ describe("CLI", function () {
             var halp = fs.readFileSync(require.resolve('../src/cli/help/get-metablock.txt'), 'utf8');
 
             it("no arg", function () {
-                expect(spawn('node', [script, subscript], {encoding: 'utf8'}).stdout)
-                    .to.equal(halp);
+                expect(exec(script(subscript)).toString()).to.equal(halp);
             });
             it("-h", function () {
-                expect(spawn('node', [script, subscript, '-h'], {encoding: 'utf8'}).stdout)
-                    .to.equal(halp);
+                expect(exec(script(subscript, this.test.title)).toString()).to.equal(halp);
             });
             it("--help", function () {
-                expect(spawn('node', [script, subscript, '--help'], {encoding: 'utf8'}).stdout)
-                    .to.equal(halp);
+                expect(exec(script(subscript, this.test.title)).toString()).to.equal(halp);
             });
         });
 
-        describe("To STDOUT", function () {
-            it("From stdin", function () {
-                expect(spawn('node', [script, subscript], {encoding: 'utf8', input: stdin}).stdout)
+        describe("To STDOUT from...", function () {
+            it("stdin", function () {
+                expect(exec(script(subscript), {input: stdin}).toString())
                     .to.equal(inProcessed);
             });
-            it("From file", function () {
-                expect(spawn('node', [script, subscript, "-i", inFile], {encoding: 'utf8'}).stdout)
+            it("file", function () {
+                expect(exec(script(subscript, "-i", inFile), {input: stdin}).toString())
                     .to.equal(inProcessed);
             });
         });
 
-        describe("To file", function () {
-            it("From file", function (d) {
-                var fname = 'o1.js';
-                spawn('node', [script, subscript, "-o", fname, "-i", inFile], {encoding: 'utf8', input: stdin});
-
-                fs.readFile(fname, 'utf8', function (e, c) {
-                    if (e) {
-                        throw e;
-                    } else {
-                        try {
-                            expect(c).to.equal(inProcessed);
-                        } finally {
-                            try {
-                                fs.unlinkSync(fname);
-                            } catch (e) {
-                            }
-                        }
+        describe("To file from...", function () {
+            it("file", function () {
+                var fname = __dirname + sep + "o1.js";
+                try {
+                    exec(script(subscript, "-o", fname, "-i", inFile));
+                    expect(fs.readFileSync(fname, 'utf8')).to.equal(inProcessed);
+                } finally {
+                    try {
+                        fs.unlinkSync(fname);
+                    } catch (e) {
                     }
-
-                    d();
-                });
+                }
             });
-            it("From stdin", function (d) {
-                var fname = 'o2.js';
-                spawn('node', [script, subscript, "-o", fname], {encoding: 'utf8', input: stdin});
-
-                fs.readFile(fname, 'utf8', function (e, c) {
-                    if (e) {
-                        throw e;
-                    } else {
-                        try {
-                            expect(c).to.equal(inProcessed);
-                        } finally {
-                            try {
-                                fs.unlinkSync(fname);
-                            } catch (e) {
-                            }
-                        }
+            it("stdin", function () {
+                var fname = __dirname + sep + "o2.js";
+                try {
+                    exec(script(subscript, "-o", fname), {input: stdin});
+                    expect(fs.readFileSync(fname, 'utf8')).to.equal(inProcessed);
+                } finally {
+                    try {
+                        fs.unlinkSync(fname);
+                    } catch (e) {
                     }
-
-                    d();
-                });
+                }
             });
         });
     });

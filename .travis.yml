@@ -10,9 +10,11 @@ cache:
     - node_modules
     - ~/.npm
 
+before_script:
+  - npm link
+
 script:
   - npm test
-  - npm prune
 
 notifications:
   on_success: change
