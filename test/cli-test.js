@@ -27,11 +27,11 @@ describe("CLI", function () {
             it("no arg", function () {
                 expect(exec(script()).toString()).to.equal(halp);
             });
-            it("-h", function () {
-                expect(exec(script(this.test.title)).toString()).to.equal(halp);
-            });
-            it("--help", function () {
-                expect(exec(script(this.test.title)).toString()).to.equal(halp);
+
+            ['-h', '--help'].forEach(function (i) {
+                it(i, function () {
+                    expect(exec(script(this.test.title)).toString()).to.equal(halp);
+                });
             });
         });
     });
@@ -46,11 +46,11 @@ describe("CLI", function () {
             it("no arg", function () {
                 expect(exec(script(subscript)).toString()).to.equal(halp);
             });
-            it("-h", function () {
-                expect(exec(script(subscript, this.test.title)).toString()).to.equal(halp);
-            });
-            it("--help", function () {
-                expect(exec(script(subscript, this.test.title)).toString()).to.equal(halp);
+
+            ['-h', '--help'].forEach(function (i) {
+                it(i, function () {
+                    expect(exec(script(subscript, this.test.title)).toString()).to.equal(halp);
+                });
             });
         });
 
@@ -59,36 +59,44 @@ describe("CLI", function () {
                 expect(exec(script(subscript), {input: stdin}).toString())
                     .to.equal(inProcessed);
             });
-            it("file", function () {
-                expect(exec(script(subscript, "-i", inFile), {input: stdin}).toString())
-                    .to.equal(inProcessed);
-            });
+
+            ["-i", "--infile"].forEach(function (i) {
+                it("file via " + i, function () {
+                    expect(exec(script(subscript, i, inFile), {input: stdin}).toString())
+                        .to.equal(inProcessed);
+                });
+            })
         });
 
         describe("To file from...", function () {
-            it("file", function () {
-                var fname = __dirname + sep + "o1.js";
-                try {
-                    exec(script(subscript, "-o", fname, "-i", inFile));
-                    expect(fs.readFileSync(fname, 'utf8')).to.equal(inProcessed);
-                } finally {
+            ["-o", "--outfile"].forEach(function (v, k) {
+                ["-i", "--infile"].forEach(function (i) {
+                    it("file via " + v + " and " + i, function () {
+                        var fname = __dirname + sep + "o" + k + ".js";
+                        try {
+                            exec(script(subscript, v, fname, i, inFile));
+                            expect(fs.readFileSync(fname, 'utf8')).to.equal(inProcessed);
+                        } finally {
+                            try {
+                                fs.unlinkSync(fname);
+                            } catch (e) {
+                            }
+                        }
+                    });
+                });
+
+                it("stdin via " + v, function () {
+                    var fname = __dirname + sep + "o2.js";
                     try {
-                        fs.unlinkSync(fname);
-                    } catch (e) {
+                        exec(script(subscript, v, fname), {input: stdin});
+                        expect(fs.readFileSync(fname, 'utf8')).to.equal(inProcessed);
+                    } finally {
+                        try {
+                            fs.unlinkSync(fname);
+                        } catch (e) {
+                        }
                     }
-                }
-            });
-            it("stdin", function () {
-                var fname = __dirname + sep + "o2.js";
-                try {
-                    exec(script(subscript, "-o", fname), {input: stdin});
-                    expect(fs.readFileSync(fname, 'utf8')).to.equal(inProcessed);
-                } finally {
-                    try {
-                        fs.unlinkSync(fname);
-                    } catch (e) {
-                    }
-                }
+                });
             });
         });
     });

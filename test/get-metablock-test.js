@@ -6,15 +6,12 @@ var expect = require('chai').expect,
 describe("GetMetablock", function () {
     describe("From string", function () {
         describe("Sync", function () {
-            it("Raw", function () {
-                expect(mod.string.sync(meta.raw).split(/\n/).length).to.equal(rawLength);
+            ['raw', 'top', 'mid'].forEach(function (i) {
+                it(i, function () {
+                    expect(mod.string.sync(meta[i]).split(/\n/).length).to.equal(rawLength);
+                });
             });
-            it("Top", function () {
-                expect(mod.string.sync(meta.top).split(/\n/).length).to.equal(rawLength)
-            });
-            it("Mid", function () {
-                expect(mod.string.sync(meta.mid).split(/\n/).length).to.equal(rawLength)
-            });
+
             it("null", function () {
                 expect(function () {
                     mod.string.sync(null);
@@ -32,33 +29,17 @@ describe("GetMetablock", function () {
             });
         });
         describe("Async", function () {
-            it("Raw", function (done) {
-                mod.string.async(meta.raw, function (err, contents) {
-                    //noinspection BadExpressionStatementJS
-                    expect(err).to.be.null;
-                    expect(contents.split(/\n/).length).to.equal(rawLength);
-                    done();
+            ['raw', 'top', 'mid'].forEach(function (i) {
+                it(i, function (done) {
+                    mod.string.async(meta[i], function (err, contents) {
+                        //noinspection BadExpressionStatementJS
+                        expect(err).to.be.null;
+                        expect(contents.split(/\n/).length).to.equal(rawLength);
+                        done();
+                    });
                 });
-                expect(mod.string.sync(meta.raw).split(/\n/).length).to.equal(rawLength);
             });
-            it("Top", function (done) {
-                mod.string.async(meta.top, function (err, contents) {
-                    //noinspection BadExpressionStatementJS
-                    expect(err).to.be.null;
-                    expect(contents.split(/\n/).length).to.equal(rawLength);
-                    done();
-                });
-                expect(mod.string.sync(meta.raw).split(/\n/).length).to.equal(rawLength);
-            });
-            it("Mid", function (done) {
-                mod.string.async(meta.mid, function (err, contents) {
-                    //noinspection BadExpressionStatementJS
-                    expect(err).to.be.null;
-                    expect(contents.split(/\n/).length).to.equal(rawLength);
-                    done();
-                });
-                expect(mod.string.sync(meta.raw).split(/\n/).length).to.equal(rawLength);
-            });
+
             it("null", function (done) {
                 mod.string.async(null, function (err, contents) {
                     //noinspection BadExpressionStatementJS
@@ -91,11 +72,10 @@ describe("GetMetablock", function () {
                     mod.file.sync("./package.json");
                 }).to.throw(Error);
             });
-            it("Top", function () {
-                expect(mod.file.sync('./test/fixtures/userscript-top.js')).to.equal(mod.string.sync(meta.top));
-            });
-            it("Mid", function () {
-                expect(mod.file.sync('./test/fixtures/userscript-mid.js')).to.equal(mod.string.sync(meta.mid));
+            ["top", "mid"].forEach(function (i) {
+                it(i, function () {
+                    expect(mod.file.sync('./test/fixtures/userscript-' + i + '.js')).to.equal(mod.string.sync(meta[i]));
+                });
             });
         });
         describe("Async", function () {
@@ -115,20 +95,14 @@ describe("GetMetablock", function () {
                     done();
                 });
             });
-            it("Top", function (done) {
-                mod.file.async('./test/fixtures/userscript-top.js', function (err, contents) {
-                    //noinspection BadExpressionStatementJS
-                    expect(err).to.be.null;
-                    expect(contents).to.equal(mod.string.sync(meta.top));
-                    done();
-                });
-            });
-            it("Mid", function (done) {
-                mod.file.async('./test/fixtures/userscript-mid.js', function (err, contents) {
-                    //noinspection BadExpressionStatementJS
-                    expect(err).to.be.null;
-                    expect(contents).to.equal(mod.string.sync(meta.mid));
-                    done();
+            ["top", "mid"].forEach(function (i) {
+                it(i, function (done) {
+                    mod.file.async('./test/fixtures/userscript-' + i + '.js', function (err, contents) {
+                        //noinspection BadExpressionStatementJS
+                        expect(err).to.be.null;
+                        expect(contents).to.equal(mod.string.sync(meta[i]));
+                        done();
+                    });
                 });
             });
         });

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha test -c --recursive",
     "test-watch": "mocha test --recursive -w -R min",
-    "test-min": "mocha test --recursive -R min"
+    "test-min": "mocha test --recursive -R progress"
   },
   "engines": {
     "node": ">=0.12"

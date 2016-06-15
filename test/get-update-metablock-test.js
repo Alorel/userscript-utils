@@ -4,31 +4,32 @@ var expect = require('chai').expect,
 
 describe("GetUpdateMetablock", function () {
     describe("From string", function () {
+        var testSet = [
+            {it: "minimal", args: [help.raw], rows: 5, update: false, download: false},
+            {it: "URL: update", args: [help.raw, true], rows: 6, update: true, download: false},
+            {it: "URL: download", args: [help.raw, false, true], rows: 6, update: false, download: true},
+            {it: "URL: update & download", args: [help.raw, true, true], rows: 7, update: true, download: true}
+        ];
         describe("Sync", function () {
-            it("minimal", function () {
-                var meta = mod.string.sync(help.raw).toLowerCase();
-                expect(meta.split(/\n/).length).to.equal(5);
-                expect(meta.indexOf("@updateurl")).to.equal(-1);
-                expect(meta.indexOf("@downloadurl")).to.equal(-1);
+            testSet.forEach(function (test) {
+                it(test.it, function () {
+                    var meta = mod.string.sync.apply(null, test.args).toLowerCase();
+                    expect(meta.split(/\n/).length).to.equal(test.rows);
+
+                    if (test.update) {
+                        expect(meta.indexOf("@updateurl")).to.not.equal(-1);
+                    } else {
+                        expect(meta.indexOf("@updateurl")).to.equal(-1);
+                    }
+
+                    if (test.download) {
+                        expect(meta.indexOf("@downloadurl")).to.not.equal(-1);
+                    } else {
+                        expect(meta.indexOf("@downloadurl")).to.equal(-1);
+                    }
+                });
             });
-            it("URL: update", function () {
-                var meta = mod.string.sync(help.raw, true).toLowerCase();
-                expect(meta.split(/\n/).length).to.equal(6);
-                expect(meta.indexOf("@updateurl")).to.not.equal(-1);
-                expect(meta.indexOf("@downloadurl")).to.equal(-1);
-            });
-            it("URL: download", function () {
-                var meta = mod.string.sync(help.raw, false, true).toLowerCase();
-                expect(meta.split(/\n/).length).to.equal(6);
-                expect(meta.indexOf("@updateurl")).to.equal(-1);
-                expect(meta.indexOf("@downloadurl")).to.not.equal(-1);
-            });
-            it("URL: [download, update]", function () {
-                var meta = mod.string.sync(help.raw, true, true).toLowerCase();
-                expect(meta.split(/\n/).length).to.equal(7);
-                expect(meta.indexOf("@updateurl")).to.not.equal(-1);
-                expect(meta.indexOf("@downloadurl")).to.not.equal(-1);
-            });
+
             it("no metablock", function () {
                 expect(function () {
                     mod.string.sync("foo");
@@ -46,66 +47,40 @@ describe("GetUpdateMetablock", function () {
             });
         });
         describe("Async", function () {
-            it("minimal", function (d) {
-                mod.string.async(help.raw, function (e, meta) {
-                    //noinspection BadExpressionStatementJS
-                    expect(e).to.be.null;
-                    //noinspection BadExpressionStatementJS
-                    expect(meta).to.not.be.null;
+            testSet.forEach(function (test) {
+                it(test.it, function (d) {
+                    var first = test.args.shift();
+                    test.args.unshift(function (e, meta) {
+                        //noinspection BadExpressionStatementJS
+                        expect(e).to.be.null;
+                        //noinspection BadExpressionStatementJS
+                        expect(meta).to.not.be.null;
 
-                    meta = meta.toLowerCase();
+                        meta = meta.toLowerCase();
 
-                    expect(meta.split(/\n/).length).to.equal(5);
-                    expect(meta.indexOf("@updateurl")).to.equal(-1);
-                    expect(meta.indexOf("@downloadurl")).to.equal(-1);
-                    d();
+
+                        expect(meta.split(/\n/).length).to.equal(test.rows);
+
+                        if (test.update) {
+                            expect(meta.indexOf("@updateurl")).to.not.equal(-1);
+                        } else {
+                            expect(meta.indexOf("@updateurl")).to.equal(-1);
+                        }
+
+                        if (test.download) {
+                            expect(meta.indexOf("@downloadurl")).to.not.equal(-1);
+                        } else {
+                            expect(meta.indexOf("@downloadurl")).to.equal(-1);
+                        }
+
+                        d();
+                    });
+                    test.args.unshift(first);
+
+                    mod.string.async.apply(null, test.args)
                 });
             });
-            it("URL: update", function (d) {
-                mod.string.async(help.raw, function (e, meta) {
-                    //noinspection BadExpressionStatementJS
-                    expect(e).to.be.null;
-                    //noinspection BadExpressionStatementJS
-                    expect(meta).to.not.be.null;
 
-                    meta = meta.toLowerCase();
-
-                    expect(meta.split(/\n/).length).to.equal(6);
-                    expect(meta.indexOf("@updateurl")).to.not.equal(-1);
-                    expect(meta.indexOf("@downloadurl")).to.equal(-1);
-                    d();
-                }, true);
-            });
-            it("URL: download", function (d) {
-                mod.string.async(help.raw, function (e, meta) {
-                    //noinspection BadExpressionStatementJS
-                    expect(e).to.be.null;
-                    //noinspection BadExpressionStatementJS
-                    expect(meta).to.not.be.null;
-
-                    meta = meta.toLowerCase();
-
-                    expect(meta.split(/\n/).length).to.equal(6);
-                    expect(meta.indexOf("@updateurl")).to.equal(-1);
-                    expect(meta.indexOf("@downloadurl")).to.not.equal(-1);
-                    d();
-                }, false, true);
-            });
-            it("URL: [download, update]", function (d) {
-                mod.string.async(help.raw, function (e, meta) {
-                    //noinspection BadExpressionStatementJS
-                    expect(e).to.be.null;
-                    //noinspection BadExpressionStatementJS
-                    expect(meta).to.not.be.null;
-
-                    meta = meta.toLowerCase();
-
-                    expect(meta.split(/\n/).length).to.equal(7);
-                    expect(meta.indexOf("@updateurl")).to.not.equal(-1);
-                    expect(meta.indexOf("@downloadurl")).to.not.equal(-1);
-                    d();
-                }, true, true);
-            });
             it("no metablock", function (d) {
                 mod.string.async("foo", function (e) {
                     //noinspection BadExpressionStatementJS
@@ -125,7 +100,13 @@ describe("GetUpdateMetablock", function () {
         });
     });
     describe("From file", function () {
-        var FILE = "./test/fixtures/userscript-top.js";
+        var FILE = "./test/fixtures/userscript-top.js",
+            argsets = [
+                {it: "minimal", args: [FILE]},
+                {it: "URL: update", args: [FILE, true]},
+                {it: "URL: download", args: [FILE, false, true]},
+                {it: "URL: update & download", args: [FILE, true, true]}
+            ];
         describe("Sync", function () {
             it("ENOENT", function () {
                 expect(function () {
@@ -137,17 +118,13 @@ describe("GetUpdateMetablock", function () {
                     mod.file.sync("./package.json")
                 }).to.throw(Error);
             });
-            it("minimal", function () {
-                expect(mod.file.sync(FILE)).to.equal(mod.string.sync(help.top))
-            });
-            it("URL: update", function () {
-                expect(mod.file.sync(FILE), true).to.equal(mod.string.sync(help.top), true)
-            });
-            it("URL: download", function () {
-                expect(mod.file.sync(FILE), false, true).to.equal(mod.string.sync(help.top), false, true)
-            });
-            it("URL: [download, update[", function () {
-                expect(mod.file.sync(FILE), true, true).to.equal(mod.string.sync(help.top), true, true)
+            argsets.forEach(function (test) {
+                it(test.it, function () {
+                    var strArgs = test.args.slice(1);
+                    strArgs.unshift(help.top);
+
+                    expect(mod.file.sync.apply(null, test.args)).to.equal(mod.string.sync.apply(null, strArgs))
+                });
             });
         });
         describe("Async", function () {
@@ -173,49 +150,24 @@ describe("GetUpdateMetablock", function () {
                     d();
                 });
             });
-            it("minimal", function (d) {
-                mod.file.async(FILE, function (e, c) {
-                    //noinspection BadExpressionStatementJS
-                    expect(c).to.not.be.null;
-                    //noinspection BadExpressionStatementJS
-                    expect(e).to.be.null;
+            argsets.forEach(function (test) {
+                it(test.it, function (d) {
+                    var strArgs = test.args.slice(1);
+                    strArgs.unshift(help.top);
 
-                    expect(c).to.equal(mod.string.sync(help.top));
-                    d();
+                    var fileArgs = test.args.slice(1);
+                    fileArgs.unshift(function (e, c) {
+                        //noinspection BadExpressionStatementJS
+                        expect(c).to.not.be.null;
+                        //noinspection BadExpressionStatementJS
+                        expect(e).to.be.null;
+
+                        expect(c).to.equal(mod.string.sync.apply(null, strArgs));
+                        d();
+                    });
+                    fileArgs.unshift(test.args[0]);
+                    mod.file.async.apply(null, fileArgs);
                 });
-            });
-            it("URL: update", function (d) {
-                mod.file.async(FILE, function (e, c) {
-                    //noinspection BadExpressionStatementJS
-                    expect(c).to.not.be.null;
-                    //noinspection BadExpressionStatementJS
-                    expect(e).to.be.null;
-
-                    expect(c).to.equal(mod.string.sync(help.top, true));
-                    d();
-                }, true);
-            });
-            it("URL: download", function (d) {
-                mod.file.async(FILE, function (e, c) {
-                    //noinspection BadExpressionStatementJS
-                    expect(c).to.not.be.null;
-                    //noinspection BadExpressionStatementJS
-                    expect(e).to.be.null;
-
-                    expect(c).to.equal(mod.string.sync(help.top, false, true));
-                    d();
-                }, false, true);
-            });
-            it("URL: [download, update]", function (d) {
-                mod.file.async(FILE, function (e, c) {
-                    //noinspection BadExpressionStatementJS
-                    expect(c).to.not.be.null;
-                    //noinspection BadExpressionStatementJS
-                    expect(e).to.be.null;
-
-                    expect(c).to.equal(mod.string.sync(help.top, true, true));
-                    d();
-                }, true, true);
             });
         });
     });
