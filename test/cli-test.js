@@ -49,7 +49,8 @@ describe("CLI", function () {
     var stdin = fs.readFileSync(inFile, 'utf8');
 
     describe("get-updateblock", function () {
-        var subscript = "get-updateblock";
+        var subscript = "get-updateblock",
+            cmdOptions = ["-u", "-d", "--updateurl", "--downloadurl", "-ud", "-du", "null"];
 
         describe("Help", function () {
             var halp = fs.readFileSync(require.resolve('../src/cli/help/get-updateblock.txt'), 'utf8');
@@ -65,7 +66,7 @@ describe("CLI", function () {
         });
 
         describe("To STDOUT with...", function () {
-            ["-u", "-d", "--updateurl", "--downloadurl", "-ud", "-du", "null"].forEach(function (option) {
+            cmdOptions.forEach(function (option) {
                 describe(option + " from...", function () {
                     it("stdin", function () {
                         var cliArgs = [subscript];
@@ -88,6 +89,52 @@ describe("CLI", function () {
                                 .to.equal(updateblocks[option]);
                         });
                     })
+                });
+            });
+        });
+
+        describe("To file with output option", function () {
+            ["-o", "--outfile"].forEach(function (outfile) {
+                describe(outfile, function () {
+                    cmdOptions.forEach(function (cmdOption) {
+                        ["-i", "--infile"].forEach(function (i) {
+                            it(i + " with cmd option " + cmdOption, function () {
+                                var fname = __dirname + sep + "o2.js",
+                                    cliArgs = [subscript, outfile, fname, i, inFile];
+                                if (cmdOption !== "null") {
+                                    cliArgs.push(cmdOption);
+                                }
+
+                                try {
+                                    exec(script.apply(null, cliArgs));
+                                    expect(fs.readFileSync(fname, 'utf8')).to.equal(updateblocks[cmdOption]);
+                                } finally {
+                                    try {
+                                        fs.unlinkSync(fname);
+                                    } catch (e) {
+                                    }
+                                }
+                            });
+                        });
+
+                        it("STDIN with cmd option " + cmdOption, function () {
+                            var fname = __dirname + sep + "o1.js",
+                                cliArgs = [subscript, outfile, fname];
+                            if (cmdOption !== "null") {
+                                cliArgs.push(cmdOption);
+                            }
+
+                            try {
+                                exec(script.apply(null, cliArgs), {input: stdin});
+                                expect(fs.readFileSync(fname, 'utf8')).to.equal(updateblocks[cmdOption]);
+                            } finally {
+                                try {
+                                    fs.unlinkSync(fname);
+                                } catch (e) {
+                                }
+                            }
+                        });
+                    });
                 });
             });
         });
