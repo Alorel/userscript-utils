@@ -2,7 +2,14 @@ var expect = require('chai').expect,
     exec = require('child_process').execSync,
     inFile = require.resolve('./fixtures/userscript-mid.js'),
     sep = require('path').sep,
-    inProcessed = require('../src/lib/get-metablock').file.sync(inFile),
+    inGetMetablock = require('../src/lib/get-metablock').file.sync(inFile),
+    getUpdateblock = require('../src/lib/get-update-metablock').string.sync,
+    updateblocks = {
+        "-d": getUpdateblock(inGetMetablock, false, true),
+        "-u": getUpdateblock(inGetMetablock, true, false),
+        "-ud": getUpdateblock(inGetMetablock, true, true),
+        "null": getUpdateblock(inGetMetablock, false, false)
+    },
     fs = require('fs'),
     /**
      * @param {...string} args
@@ -17,8 +24,11 @@ var expect = require('chai').expect,
         return cmd;
     };
 
+updateblocks["--updateurl"] = updateblocks["-u"];
+updateblocks["--downloadurl"] = updateblocks["-d"];
+updateblocks["-du"] = updateblocks["-ud"];
+
 describe("CLI", function () {
-    this.timeout(10000);
 
     describe('Index', function () {
         describe("Help", function () {
@@ -36,9 +46,55 @@ describe("CLI", function () {
         });
     });
 
+    var stdin = fs.readFileSync(inFile, 'utf8');
+
+    describe("get-updateblock", function () {
+        var subscript = "get-updateblock";
+
+        describe("Help", function () {
+            var halp = fs.readFileSync(require.resolve('../src/cli/help/get-updateblock.txt'), 'utf8');
+
+            it("no arg", function () {
+                expect(exec(script(subscript)).toString()).to.equal(halp);
+            });
+            ['-h', '--help'].forEach(function (i) {
+                it(i, function () {
+                    expect(exec(script(subscript, this.test.title)).toString()).to.equal(halp);
+                });
+            });
+        });
+
+        describe("To STDOUT with...", function () {
+            ["-u", "-d", "--updateurl", "--downloadurl", "-ud", "-du", "null"].forEach(function (option) {
+                describe(option + " from...", function () {
+                    it("stdin", function () {
+                        var cliArgs = [subscript];
+                        if (option !== "null") {
+                            cliArgs.push(option);
+                        }
+
+                        expect(exec(script.apply(null, cliArgs), {input: stdin}).toString())
+                            .to.equal(updateblocks[option]);
+                    });
+
+                    ["-i", "--infile"].forEach(function (i) {
+                        it("file via " + i, function () {
+                            var cliArgs = [subscript, i, inFile];
+                            if (option !== "null") {
+                                cliArgs.push(option);
+                            }
+
+                            expect(exec(script.apply(null, cliArgs), {input: stdin}).toString())
+                                .to.equal(updateblocks[option]);
+                        });
+                    })
+                });
+            });
+        });
+    });
+
     describe("get-metablock", function () {
-        var stdin = fs.readFileSync(inFile, 'utf8'),
-            subscript = "get-metablock";
+        var subscript = "get-metablock";
 
         describe("Help", function () {
             var halp = fs.readFileSync(require.resolve('../src/cli/help/get-metablock.txt'), 'utf8');
@@ -57,13 +113,13 @@ describe("CLI", function () {
         describe("To STDOUT from...", function () {
             it("stdin", function () {
                 expect(exec(script(subscript), {input: stdin}).toString())
-                    .to.equal(inProcessed);
+                    .to.equal(inGetMetablock);
             });
 
             ["-i", "--infile"].forEach(function (i) {
                 it("file via " + i, function () {
-                    expect(exec(script(subscript, i, inFile), {input: stdin}).toString())
-                        .to.equal(inProcessed);
+                    expect(exec(script(subscript, i, inFile)).toString())
+                        .to.equal(inGetMetablock);
                 });
             })
         });
@@ -75,7 +131,7 @@ describe("CLI", function () {
                         var fname = __dirname + sep + "o" + k + ".js";
                         try {
                             exec(script(subscript, v, fname, i, inFile));
-                            expect(fs.readFileSync(fname, 'utf8')).to.equal(inProcessed);
+                            expect(fs.readFileSync(fname, 'utf8')).to.equal(inGetMetablock);
                         } finally {
                             try {
                                 fs.unlinkSync(fname);
@@ -89,7 +145,7 @@ describe("CLI", function () {
                     var fname = __dirname + sep + "o2.js";
                     try {
                         exec(script(subscript, v, fname), {input: stdin});
-                        expect(fs.readFileSync(fname, 'utf8')).to.equal(inProcessed);
+                        expect(fs.readFileSync(fname, 'utf8')).to.equal(inGetMetablock);
                     } finally {
                         try {
                             fs.unlinkSync(fname);
@@ -100,6 +156,4 @@ describe("CLI", function () {
             });
         });
     });
-
-    // describe("get-updateblock",function(){});
 });
