@@ -11,10 +11,8 @@ cache:
     - ~/.npm
 
 before_script:
-  - npm link
-
-before_script:
   - npm i istanbul
+  - npm link
 
 script:
   - npm test
