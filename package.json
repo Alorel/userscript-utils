@@ -5,7 +5,7 @@
   "preferGlobal": true,
   "scripts": {
     "test": "mocha-parallel-tests test -c --recursive --max-parallel 100",
-    "test012": "mocha test -c --recursive",
+    "test012": "node node_modules/mocha/bin/_mocha test -c --recursive",
     "test-watch": "mocha-parallel-tests test --recursive -w -R min",
     "test-min": "mocha-parallel-tests test --recursive -R progress"
   },
