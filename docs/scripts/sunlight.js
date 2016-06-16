@@ -12,7 +12,7 @@
 	var
 	//http://webreflection.blogspot.com/2009/01/32-bytes-to-know-if-your-browser-is-ie.html
 	//we have to sniff this because IE requires \r
-		isIe = !+"\v1",
+		isIe = !+"\v1", 
 		EOL = isIe ? "\r" : "\n",
 		EMPTY = function () {
 			return null;
@@ -55,12 +55,12 @@
 
 		return {
 			handleToken: function (context) {
-				return defaultHandleToken(context.tokens[context.index].name)(context);
+				return defaultHandleToken(context.tokens[context.index].name)(context); 
 			},
 
 			//just append default content as a text node
 			handle_default: function (context) {
-				return context.addNode(context.createTextNode(context.tokens[context.index]));
+				return context.addNode(context.createTextNode(context.tokens[context.index])); 
 			},
 
 			//this handles the named ident mayhem
@@ -262,7 +262,6 @@
 	function create(o) {
 		function F() {
 		}
-
 		F.prototype = o;
 		return new F();
 	}
@@ -446,7 +445,7 @@
 
 	//gets the next token in the specified direction while matcher matches the current token
 	function getNextWhile(tokens, index, direction, matcher) {
-		var count = 1,
+		var count = 1, 
 			token;
 
 		direction = direction || 1;
@@ -486,7 +485,7 @@
 	function defaultNumberParser(context) {
 		var current = context.reader.current(),
 			number,
-			line = context.reader.getLine(),
+			line = context.reader.getLine(), 
 			column = context.reader.getColumn(),
 			allowDecimal = true,
 			peek;
@@ -725,7 +724,6 @@
 					buffer += processCurrent ? current : context.reader.read();
 					return true;
 				}
-
 				if (!processCurrent || process(true)) {
 					while (context.reader.peek() !== context.reader.EOF && process(false)) {
 					}
@@ -938,7 +936,7 @@
 				language: language,
 				previousContext: partialContext
 			});
-
+			
 			analyzerContext = createAnalyzerContext(
 				tokenize.call(this, unhighlightedCode, language, partialContext, this.options),
 				partialContext,
@@ -969,7 +967,7 @@
 				analyzer;
 
 			fireEvent("beforeAnalyze", this, {analyzerContext: analyzerContext});
-
+			
 			if (analyzerContext.tokens.length > 0) {
 				analyzerContext.language = languages[analyzerContext.tokens[0].language] || languages[DEFAULT_LANGUAGE];
 				nodes = [];
@@ -1103,10 +1101,10 @@
 					container.appendChild(codeContainer);
 				}
 
-				fireEvent("afterHighlightNode", this, {
+				fireEvent("afterHighlightNode", this, { 
 					container: container,
 					codeContainer: codeContainer,
-					node: node,
+					node: node, 
 					count: currentNodeCount
 				});
 			}

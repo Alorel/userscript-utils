@@ -1,6 +1,10 @@
 Useful tools for developing userscripts - in both CLI and API modes (CLI uses asynchronous calls while API can use either).
 
 [![Build Status](https://travis-ci.org/Alorel/userscript-utils.svg?branch=master)](https://travis-ci.org/Alorel/userscript-utils/branches)
+[![Dependency Status](https://david-dm.org/alorel/userscript-utils.svg?style=flat-square)](https://david-dm.org/alorel/userscript-utils)
+[![devDependency Status](https://david-dm.org/alorel/userscript-utils/dev-status.svg?style=flat-square)](https://david-dm.org/alorel/userscript-utils#info=devDependencies)
+
+[![NPM](https://nodei.co/npm/userscript-utils.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/userscript-utils)
 
 # Table of Contents
 
@@ -83,7 +87,7 @@ Requires node version `>=0.12`
 >         -d, --downloadurl   - Include the @downloadURL tag in the output
 
 ## API usage
-See [generated JSDoc](https://cdn.rawgit.com/Alorel/userscript-utils/1.0.0-beta.2/docs/index.html).
+See [generated JSDoc](https://cdn.rawgit.com/Alorel/userscript-utils/1.0.0/docs/index.html).
 
 # Examples
 ## CLI examples
