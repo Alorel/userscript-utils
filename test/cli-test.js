@@ -2,8 +2,8 @@ var expect = require('chai').expect,
     exec = require('child_process').execSync,
     inFile = require.resolve('./fixtures/userscript-mid.js'),
     sep = require('path').sep,
-    inGetMetablock = require('../src/lib/get-metablock').file.sync(inFile),
-    getUpdateblock = require('../src/lib/get-update-metablock').string.sync,
+    inGetMetablock = require('../src/lib/get-metablock').fromFileSync(inFile),
+    getUpdateblock = require('../src/lib/get-update-metablock').fromStringSync,
     updateblocks = {
         "-d": getUpdateblock(inGetMetablock, false, true),
         "-u": getUpdateblock(inGetMetablock, true, false),
@@ -11,10 +11,6 @@ var expect = require('chai').expect,
         "null": getUpdateblock(inGetMetablock, false, false)
     },
     fs = require('fs'),
-    /**
-     * @param {...string} args
-     * @returns {string}
-     */
     script = function () {
         var cmd = "userscript-utils",
             i = 0;

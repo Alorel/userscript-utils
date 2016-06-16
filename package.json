@@ -4,7 +4,8 @@
   "description": "Useful tools for developing userscripts",
   "preferGlobal": true,
   "scripts": {
-    "test": "mocha test -c --recursive --max-parallel 100",
+    "test": "mocha test -c --recursive",
+    "jsdoc": "rimraf ./docs && jsdoc -d ./docs -t ./node_modules/ink-docstrap/template -r -R ./README.md -c ./.jsdoc.json ./src/lib ./src/index.js",
     "test-watch": "mocha test --recursive -w -R min",
     "test-min": "mocha test --recursive -R progress"
   },
@@ -43,8 +44,11 @@
   "homepage": "https://github.com/Alorel/userscript-utils#readme",
   "license": "LGPL-2.1 ",
   "devDependencies": {
+    "ink-docstrap": "^1.1",
+    "jsdoc": "^3.4",
     "chai": "^3.5",
     "minimist": "^1.2",
+    "rimraf": "^2.5",
     "mocha": "^2.5"
   }
 }

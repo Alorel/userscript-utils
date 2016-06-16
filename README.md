@@ -6,10 +6,12 @@ Useful tools for developing userscripts - in both CLI and API modes (CLI uses as
 
  - Extract the entire metadata block
  - Extract the small portion of the metadata block that's required for `.meta.js` files (`@updateURL`)
- - 
+
 #Installation
 
-    npm install -g userscript-utils
+```sh
+npm install -g userscript-utils
+```
 
 # Compatibility
 
@@ -63,6 +65,4 @@ Requires node version `>=0.12`
 
 ## API
 
-```js
-var usi = require("userscript-utils");
-```
+[todo: inc link]

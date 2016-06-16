@@ -1,12 +1,18 @@
 var fs = require('fs'),
     /**
+     * Path separator
+     * @type {string}
+     */
+    sep = require('path').sep;
+
+module.exports = {
+    /**
      * Perform output
      * @author Art <a.molcanovas@gmail.com>
-     * @function
      * @param {Object} argv Process args
      * @param {string} result Computed result
      */
-    doOut = function (argv, result) {
+    doOut: function (argv, result) {
         if (argv.outfile) {
             fs.writeFile(argv.outfile, result, 'utf8', function (e) {
                 if (e) {
@@ -19,17 +25,11 @@ var fs = require('fs'),
         }
     },
     /**
-     * Path separator
-     * @type {string}
-     */
-    sep = require('path').sep,
-    /**
      * The help file to read
      * @author Art <a.molcanovas@gmail.com>
-     * @function
      * @param {string} file Path to the file
      */
-    help = function (file) {
+    help: function (file) {
         fs.readFile(__dirname + sep + "help" + sep + file + ".txt", 'utf8', function (e, o) {
                 if (e) {
                     process.stderr.write(e.message);
@@ -39,9 +39,5 @@ var fs = require('fs'),
             }
         )
         ;
-    };
-
-module.exports = {
-    doOut: doOut,
-    help: help
+    }
 };

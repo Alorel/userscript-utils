@@ -13,7 +13,7 @@ describe("GetUpdateMetablock", function () {
         describe("Sync", function () {
             testSet.forEach(function (test) {
                 it(test.it, function () {
-                    var meta = mod.string.sync.apply(null, test.args).toLowerCase();
+                    var meta = mod.fromStringSync.apply(null, test.args).toLowerCase();
                     expect(meta.split(/\n/).length).to.equal(test.rows);
 
                     if (test.update) {
@@ -32,17 +32,17 @@ describe("GetUpdateMetablock", function () {
 
             it("no metablock", function () {
                 expect(function () {
-                    mod.string.sync("foo");
+                    mod.fromStringSync("foo");
                 }).to.throw(Error);
             });
             it("undefined", function () {
                 expect(function () {
-                    mod.string.sync();
+                    mod.fromStringSync();
                 }).to.throw(Error);
             });
             it("null", function () {
                 expect(function () {
-                    mod.string.sync(null);
+                    mod.fromStringSync(null);
                 }).to.throw(Error);
             });
         });
@@ -77,12 +77,12 @@ describe("GetUpdateMetablock", function () {
                     });
                     test.args.unshift(first);
 
-                    mod.string.async.apply(null, test.args)
+                    mod.fromString.apply(null, test.args)
                 });
             });
 
             it("no metablock", function (d) {
-                mod.string.async("foo", function (e) {
+                mod.fromString("foo", function (e) {
                     //noinspection BadExpressionStatementJS
                     expect(e).to.not.be.null;
                     expect(e.message).to.equal("Metablock not found");
@@ -90,7 +90,7 @@ describe("GetUpdateMetablock", function () {
                 });
             });
             it("null", function (d) {
-                mod.string.async(null, function (e) {
+                mod.fromString(null, function (e) {
                     //noinspection BadExpressionStatementJS
                     expect(e).to.not.be.null;
                     expect(e.message).to.equal("Cannot read property 'split' of null");
@@ -110,12 +110,12 @@ describe("GetUpdateMetablock", function () {
         describe("Sync", function () {
             it("ENOENT", function () {
                 expect(function () {
-                    mod.file.sync("./package.jsonn")
+                    mod.fromFileSync("./package.jsonn")
                 }).to.throw(Error);
             });
             it("no metablock", function () {
                 expect(function () {
-                    mod.file.sync("./package.json")
+                    mod.fromFileSync("./package.json")
                 }).to.throw(Error);
             });
             argsets.forEach(function (test) {
@@ -123,13 +123,13 @@ describe("GetUpdateMetablock", function () {
                     var strArgs = test.args.slice(1);
                     strArgs.unshift(help.top);
 
-                    expect(mod.file.sync.apply(null, test.args)).to.equal(mod.string.sync.apply(null, strArgs))
+                    expect(mod.fromFileSync.apply(null, test.args)).to.equal(mod.fromStringSync.apply(null, strArgs))
                 });
             });
         });
         describe("Async", function () {
             it("ENOENT", function (d) {
-                mod.file.async("./package.jsonn", function (e, c) {
+                mod.fromFile("./package.jsonn", function (e, c) {
                     //noinspection BadExpressionStatementJS
                     expect(c).to.be.null;
                     //noinspection BadExpressionStatementJS
@@ -140,7 +140,7 @@ describe("GetUpdateMetablock", function () {
                 });
             });
             it("no metablock", function (d) {
-                mod.file.async("./package.json", function (e, c) {
+                mod.fromFile("./package.json", function (e, c) {
                     //noinspection BadExpressionStatementJS
                     expect(c).to.be.null;
                     //noinspection BadExpressionStatementJS
@@ -162,11 +162,11 @@ describe("GetUpdateMetablock", function () {
                         //noinspection BadExpressionStatementJS
                         expect(e).to.be.null;
 
-                        expect(c).to.equal(mod.string.sync.apply(null, strArgs));
+                        expect(c).to.equal(mod.fromStringSync.apply(null, strArgs));
                         d();
                     });
                     fileArgs.unshift(test.args[0]);
-                    mod.file.async.apply(null, fileArgs);
+                    mod.fromFile.apply(null, fileArgs);
                 });
             });
         });

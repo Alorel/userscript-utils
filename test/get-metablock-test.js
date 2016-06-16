@@ -8,30 +8,30 @@ describe("GetMetablock", function () {
         describe("Sync", function () {
             ['raw', 'top', 'mid'].forEach(function (i) {
                 it(i, function () {
-                    expect(mod.string.sync(meta[i]).split(/\n/).length).to.equal(rawLength);
+                    expect(mod.fromStringSync(meta[i]).split(/\n/).length).to.equal(rawLength);
                 });
             });
 
             it("null", function () {
                 expect(function () {
-                    mod.string.sync(null);
+                    mod.fromStringSync(null);
                 }).to.throw(Error);
             });
             it("undefined", function () {
                 expect(function () {
-                    mod.string.sync();
+                    mod.fromStringSync();
                 }).to.throw(Error);
             });
             it("no metablock", function () {
                 expect(function () {
-                    mod.string.sync("foo");
+                    mod.fromStringSync("foo");
                 }).to.throw(Error);
             });
         });
         describe("Async", function () {
             ['raw', 'top', 'mid'].forEach(function (i) {
                 it(i, function (done) {
-                    mod.string.async(meta[i], function (err, contents) {
+                    mod.fromString(meta[i], function (err, contents) {
                         //noinspection BadExpressionStatementJS
                         expect(err).to.be.null;
                         expect(contents.split(/\n/).length).to.equal(rawLength);
@@ -41,7 +41,7 @@ describe("GetMetablock", function () {
             });
 
             it("null", function (done) {
-                mod.string.async(null, function (err, contents) {
+                mod.fromString(null, function (err, contents) {
                     //noinspection BadExpressionStatementJS
                     expect(contents).to.be.null;
                     //noinspection BadExpressionStatementJS
@@ -51,7 +51,7 @@ describe("GetMetablock", function () {
                 });
             });
             it("no metablock", function (done) {
-                mod.string.async("foo", function (err, contents) {
+                mod.fromString("foo", function (err, contents) {
                     //noinspection BadExpressionStatementJS
                     expect(contents).to.be.null;
                     expect(err.message).to.equal("Metadata block not found");
@@ -64,23 +64,23 @@ describe("GetMetablock", function () {
         describe("Sync", function () {
             it("ENOENT", function () {
                 expect(function () {
-                    mod.file.sync("./package.jsonn");
+                    mod.fromFileSync("./package.jsonn");
                 }).to.throw(Error);
             });
             it("No metablock", function () {
                 expect(function () {
-                    mod.file.sync("./package.json");
+                    mod.fromFileSync("./package.json");
                 }).to.throw(Error);
             });
             ["top", "mid"].forEach(function (i) {
                 it(i, function () {
-                    expect(mod.file.sync('./test/fixtures/userscript-' + i + '.js')).to.equal(mod.string.sync(meta[i]));
+                    expect(mod.fromFileSync('./test/fixtures/userscript-' + i + '.js')).to.equal(mod.fromStringSync(meta[i]));
                 });
             });
         });
         describe("Async", function () {
             it("ENOENT", function (done) {
-                mod.file.async("./package.jsonn", function (err) {
+                mod.fromFile("./package.jsonn", function (err) {
                     //noinspection BadExpressionStatementJS
                     expect(err).to.not.be.null;
                     expect(err.code).to.equal("ENOENT");
@@ -88,7 +88,7 @@ describe("GetMetablock", function () {
                 });
             });
             it("No metablock", function (done) {
-                mod.file.async("./package.json", function (err) {
+                mod.fromFile("./package.json", function (err) {
                     //noinspection BadExpressionStatementJS
                     expect(err).to.not.be.null;
                     expect(err.message).to.equal("Metadata block not found");
@@ -97,10 +97,10 @@ describe("GetMetablock", function () {
             });
             ["top", "mid"].forEach(function (i) {
                 it(i, function (done) {
-                    mod.file.async('./test/fixtures/userscript-' + i + '.js', function (err, contents) {
+                    mod.fromFile('./test/fixtures/userscript-' + i + '.js', function (err, contents) {
                         //noinspection BadExpressionStatementJS
                         expect(err).to.be.null;
-                        expect(contents).to.equal(mod.string.sync(meta[i]));
+                        expect(contents).to.equal(mod.fromStringSync(meta[i]));
                         done();
                     });
                 });

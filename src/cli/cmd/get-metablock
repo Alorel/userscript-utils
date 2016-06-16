@@ -16,7 +16,7 @@ module.exports = function () {
     if (argv.help) {
         common.help(helpfile);
     } else if (argv.infile) {
-        mod.file.async(argv.infile, function (e, c) {
+        mod.fromFile(argv.infile, function (e, c) {
             if (e) {
                 process.stderr.write(e.message);
             } else {
@@ -26,7 +26,7 @@ module.exports = function () {
     } else {
         stdin().then(function (input) {
             if (input) {
-                mod.string.async(input, function (e, c) {
+                mod.fromString(input, function (e, c) {
                     if (e) {
                         process.stderr.write(e.message);
                         process.exit(1);
