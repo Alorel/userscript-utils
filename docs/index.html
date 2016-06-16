@@ -56,13 +56,13 @@
                         <div class="input-group-btn">
                             <button class="btn btn-default" id="search-submit"><i
                                     class="glyphicon glyphicon-search"></i></button>
-                        </div>
+                    </div>
                     </div>
                 </form>
-            </div>
+        </div>
         </div>
 
-    </div>
+</div>
 </div>
 
 
@@ -102,10 +102,20 @@
                                                 metadata block</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="#api-examples">API examples</a></li>
+                                    <li><a href="#api-examples">API examples</a>
+                                        <ul>
+                                            <li><a href="#extracting-the-metajs-metablock-and-writing-it-to-a-new-file">Extracting
+                                                the .meta.js metablock and writing it to a new file</a></li>
+                                            <li><a href="#extracting-the-full-metadata-block">Extracting the full
+                                                metadata block</a></li>
+                                            <li><a href="#extracting-the-full-metadata-block">Combining with
+                                                UglifyJS</a></li>
+                                        </ul>
+                                    </li>
                                     <li><a href="#grunt-task-example">Grunt task example</a></li>
                                 </ul>
                             </li>
+                            <li><a href="#notes-before-running-tests">Notes before running tests</a></li>
                         </ul>
                         <h1>Features</h1>
                         <ul>
@@ -161,7 +171,8 @@ Options:
     -d, --downloadurl   - Include the @downloadURL tag in the output</code></pre>
                         </blockquote>
                         <h2>API usage</h2>
-                        <p>[todo: inc link]</p>
+                        <p>See <a href="https://cdn.rawgit.com/Alorel/userscript-utils/1.0.0-beta.2/docs/index.html">generated
+                            JSDoc</a>.</p>
                         <h1>Examples</h1>
                         <h2>CLI examples</h2>
                         <h3>Creating a .meta.js file from a .user.js file</h3>
@@ -184,9 +195,150 @@ cat foo.user.js | userscript-utils get-updateblock >> foo.meta.js;</code></pre>
                             <code>--downloadurl</code> and <code>--updateurl</code> being invalid:</p>
                         <pre class="prettyprint source lang-sh"><code>userscript-utils get-metablock -i foo.user.js -o foo.big.meta.js;</code></pre>
                         <h2>API examples</h2>
-                        <p>[todo]</p>
+                        <h3>Extracting the <code>.meta.js</code> metablock and writing it to a new file:</h3><pre
+                                class="prettyprint source lang-js"><code>var utils = require('userscript-utils').getUpdateMetablock,
+    fs = require('fs'),
+    inputFile = &quot;foo.user.js&quot;,
+    outputFile = &quot;foo.meta.js&quot;,
+//For fs.writeFile
+    innerCallback = function (e) {
+        if (e) {
+            throw e;
+        }
+    },
+//For userscript-utils
+    outerCallback = function (e, o) {
+        if (e) {
+            throw e;
+        } else {
+            fs.writeFile(outputFile, o, 'utf8', innerCallback);
+        }
+    };
+
+//Bare minimum
+utils.fromFile(inputFile, outerCallback);
+
+//Include @updateURL
+utils.fromFile(inputFile, outerCallback, true);
+
+//Include @downloadURL
+utils.fromFile(inputFile, outerCallback, false, true);
+
+//Include @updateURL @downloadURL
+utils.fromFile(inputFile, outerCallback, true, true);
+
+// For synchronous mode simply omit the callback argument and replate the method with &quot;fromFileSync&quot;:
+try {
+    utils.fromFileSync(inputFile);
+} catch (e) {
+    //handle
+}
+
+//And you can just as easily do the same if you have the file contents as a string:
+utils.fromString(stringContainingFileContents, outerCallback);
+
+try {
+    utils.fromStringSync(stringContainingFileContents);
+} catch (e) {
+    //handle
+}</code></pre>
+                        <h3>Extracting the full metadata block</h3><pre class="prettyprint source lang-js"><code>var utils = require('userscript-utils').getMetablock,
+    fs = require('fs'),
+    inputFile = &quot;foo.user.js&quot;,
+    outputFile = &quot;foo.meta.js&quot;,
+//For fs.writeFile
+    innerCallback = function (e) {
+        if (e) {
+            throw e;
+        }
+    },
+//For userscript-utils
+    outerCallback = function (e, o) {
+        if (e) {
+            throw e;
+        } else {
+            fs.writeFile(outputFile, o, 'utf8', innerCallback);
+        }
+    };
+
+//Async
+utils.fromFile(inputFile, outerCallback);
+
+// Sync
+try {
+    utils.fromFileSync(inputFile);
+} catch (e) {
+    //handle
+}
+
+//And you can just as easily do the same if you have the file contents as a string:
+utils.fromString(stringContainingFileContents, outerCallback);
+
+try {
+    utils.fromStringSync(stringContainingFileContents);
+} catch (e) {
+    //handle
+}</code></pre>
+                        <h3>Combining with <a href="https://www.npmjs.com/package/uglify-js">UglifyJS</a></h3><pre
+                                class="prettyprint source lang-js"><code>var utils = require('userscript-utils'),
+    minify = require('uglify-js').minify,
+    fs = require('fs'),
+    inFile = &quot;foo.user.js&quot;,
+    outFile = &quot;foo.min.user.js&quot;;
+
+//Get our metablock
+utils.getMetablock.fromFile(inFile, function (e, metablock) {
+    if (e) {
+        throw e;
+    } else {
+        // Minify the JS
+        var minified = minify(inFile).code;
+
+        //Open our file for writing
+        fs.open(outFile, 'w', function (e, fd) {
+            if (e) {
+                throw e;
+            } else {
+                //Write our file
+                fs.write(fd, metablock + &quot;\n&quot; + minified, function (e) {
+                    try {
+                        if (e) {
+                            throw e;
+                        }
+                    } finally {
+                        fs.close(fd, function (e) {
+                            if (e) {
+                                throw e;
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+});</code></pre>
                         <h2>Grunt task example</h2>
-                        <p>[todo]</p></article>
+                        <p>You'll need <a href="https://www.npmjs.com/package/grunt-run">grunt-run</a>:</p>
+                        <pre class="prettyprint source lang-sh"><code>npm i --save-dev grunt-run;</code></pre>
+                        <p>Add a <code>run</code> task to your <code>Gruntfile.js</code> under any name (e.g.
+                            <em>foo</em>) containing a CLI command to execute, e.g.:</p>
+<pre class="prettyprint source lang-js"><code>module.exports = function (grunt) {
+    // Initializing configuration objects
+    grunt.initConfig({
+        run: {
+            foo: {
+                exec: 'userscript-utils get-updateblock -i foo.user.js -o foo.meta.js'
+            }
+        }
+    });
+
+    grunt.loadNpmTasks('grunt-run');
+};</code></pre>
+                        <p>Run the task:</p>
+                        <pre class="prettyprint source lang-sh"><code>grunt run:foo;</code></pre>
+                        <h1>Notes before running tests</h1>
+                        <p>If you cloned this repository and want to run tests be sure to run <code>npm link</code>
+                            beforehand otherwise you'll get errors!</p></article>
                 </section>
 
 
@@ -303,6 +455,7 @@ cat foo.user.js | userscript-utils get-updateblock >> foo.meta.js;</code></pre>
 
     });
 </script>
+
 
 
 <!--Navigation and Symbol Display-->

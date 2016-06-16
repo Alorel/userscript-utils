@@ -43,7 +43,7 @@ window.SearcherDisplay = (function ($) {
                     "msgid": "docstrap.quicksearch.start"
                 }, "*");
             }
-        }
+            }
 
         $('#search-input').on('keyup', function (evt) {
             if (evt.keyCode != 13) {

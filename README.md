@@ -83,7 +83,7 @@ Requires node version `>=0.12`
 >         -d, --downloadurl   - Include the @downloadURL tag in the output
 
 ## API usage
-See [generated JSDoc](https://cdn.rawgit.com/Alorel/userscript-utils/1.0.0-beta.1/docs/index.html).
+See [generated JSDoc](https://cdn.rawgit.com/Alorel/userscript-utils/1.0.0-beta.2/docs/index.html).
 
 # Examples
 ## CLI examples

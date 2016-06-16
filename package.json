@@ -1,6 +1,6 @@
 {
   "name": "userscript-utils",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "Useful tools for developing userscripts",
   "preferGlobal": true,
   "scripts": {
@@ -23,6 +23,7 @@
   ],
   "dependencies": {
     "async": "^2.0.0-alpha.0",
+    "minimist": "^1.0",
     "get-stdin": "^5.0"
   },
   "author": {
@@ -47,7 +48,6 @@
     "ink-docstrap": "^1.1",
     "jsdoc": "^3.4",
     "chai": "^3.5",
-    "minimist": "^1.2",
     "rimraf": "^2.5",
     "mocha": "^2.5"
   }
