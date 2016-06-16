@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Userscript Utils Index</title>
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+    <link type="text/css" rel="stylesheet" href="styles/site.simplex.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">Userscript Utils</a>
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse" id="topNavigation">
+            <ul class="nav navbar-nav">
+
+                <li class="dropdown">
+                    <a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b
+                            class="caret"></b></a>
+                    <ul class="dropdown-menu ">
+                        <li><a href="module-userscript-utils.html">userscript-utils</a></li>
+                        <li><a href="module-userscript-utils_getMetablock.html">userscript-utils/getMetablock</a></li>
+                        <li><a href="module-userscript-utils_getUpdateMetablock.html">userscript-utils/getUpdateMetablock</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+                    <ul class="dropdown-menu ">
+                        <li><a href="global.html">Global</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i
+                                    class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="container" id="toc-content">
+    <div class="row">
+
+
+        <div class="col-md-8">
+
+            <div id="main">
+
+
+                <section class="readme-section">
+                    <article><p>Useful tools for developing userscripts - in both CLI and API modes (CLI uses
+                        asynchronous calls while API can use either).</p>
+                        <p><a href="https://travis-ci.org/Alorel/userscript-utils/branches"><img
+                                src="https://travis-ci.org/Alorel/userscript-utils.svg?branch=master"
+                                alt="Build Status"></a></p>
+                        <h1>Table of Contents</h1>
+                        <ul>
+                            <li><a href="#features">Features</a></li>
+                            <li><a href="#installation">Installation</a></li>
+                            <li><a href="#compatibility">Compatibility</a></li>
+                            <li><a href="#usage">Usage</a>
+                                <ul>
+                                    <li><a href="#cli-usage">CLI usage</a></li>
+                                    <li><a href="#api-usage">API usage</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#examples">Examples</a>
+                                <ul>
+                                    <li><a href="#cli-examples">CLI examples</a>
+                                        <ul>
+                                            <li><a href="#creating-a-metajs-file-from-a-userjs-file">Creating a .meta.js
+                                                file from a .user.js file</a></li>
+                                            <li><a href="#extracting-the-entire-metadata-block">Extracting the entire
+                                                metadata block</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#api-examples">API examples</a></li>
+                                    <li><a href="#grunt-task-example">Grunt task example</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <h1>Features</h1>
+                        <ul>
+                            <li>Extract the entire metadata block</li>
+                            <li>Extract the small portion of the metadata block that's required for
+                                <code>.meta.js</code> files (<code>@updateURL</code>)
+                            </li>
+                        </ul>
+                        <p>#Installation</p>
+                        <pre class="prettyprint source lang-sh"><code>npm install -g userscript-utils</code></pre>
+                        <h1>Compatibility</h1>
+                        <p>Requires node version <code>&gt;=0.12</code></p>
+                        <h1>Usage</h1>
+                        <h2>CLI usage</h2>
+                        <blockquote>
+                            <p>{lamb} userscript-utils --help</p>
+<pre class="prettyprint source"><code>Userscript utilities
+
+Usage: userscript-utils &lt;cmd> [options]
+Pass -h or --help to any command to display command-specific help
+
+Commands:
+
+    get-metablock   - Retrieve the entire metadata block
+    get-updateblock - Retrieve a shortened metadata block for .meta.js files</code></pre>
+                        </blockquote>
+                        <hr>
+                        <blockquote>
+                            <p>{lamb} userscript-utils get-metablock --help</p>
+<pre class="prettyprint source"><code>Retrieve the entire metadata block
+
+Usage: userscript-utils get-metablock [options]
+
+Options:
+
+    -h, --help      - Display this help
+    -i, --infile    - Get contents from a file as opposed to STDIN
+    -o, --outfile   - Output result to a file as opposed to STDOUT</code></pre>
+                        </blockquote>
+                        <hr>
+                        <blockquote>
+                            <p>{lamb} userscript-utils get-updateblock --help</p>
+<pre class="prettyprint source"><code>Retrieve the shortened metadata block required for .meta.js files and @updateURL
+
+Usage: userscript-utils get-updateblock [options]
+
+Options:
+
+    -h, --help          - Display this help
+    -i, --infile        - Get contents from a file as opposed to STDIN
+    -o, --outfile       - Output result to a file as opposed to STDOUT
+    -u, --updateurl     - Include the @updateURL tag in the output
+    -d, --downloadurl   - Include the @downloadURL tag in the output</code></pre>
+                        </blockquote>
+                        <h2>API usage</h2>
+                        <p>[todo: inc link]</p>
+                        <h1>Examples</h1>
+                        <h2>CLI examples</h2>
+                        <h3>Creating a .meta.js file from a .user.js file</h3>
+                        <p>Bare minimum:</p>
+<pre class="prettyprint source lang-sh"><code>userscript-utils get-updateblock -i foo.user.js -o foo.meta.js;
+#or
+userscript-utils get-updateblock -i foo.user.js >> foo.meta.js;</code></pre>
+                        <p>Include <code>@updateURL</code> &amp; <code>@downloadURL</code>:</p>
+<pre class="prettyprint source lang-sh"><code>userscript-utils get-updateblock -i foo.user.js -o foo.meta.js -du;
+#or
+userscript-utils get-updateblock -i foo.user.js -du >> foo.meta.js;</code></pre>
+                        <p>From STDIN:</p>
+<pre class="prettyprint source lang-sh"><code>cat foo.user.js | userscript-utils get-updateblock -o foo.meta.js;
+#or
+cat foo.user.js | userscript-utils get-updateblock >> foo.meta.js;</code></pre>
+                        <p>Or simply view the output by omitting the <code>-o</code> and <code>--output</code> options.
+                        </p>
+                        <h3>Extracting the entire metadata block</h3>
+                        <p>Same options/arguments as above with the exception of <code>-d</code>, <code>-u</code>,
+                            <code>--downloadurl</code> and <code>--updateurl</code> being invalid:</p>
+                        <pre class="prettyprint source lang-sh"><code>userscript-utils get-metablock -i foo.user.js -o foo.big.meta.js;</code></pre>
+                        <h2>API examples</h2>
+                        <p>[todo]</p>
+                        <h2>Grunt task example</h2>
+                        <p>[todo]</p></article>
+                </section>
+
+
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+
+        <div class="col-md-3">
+            <div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+        </div>
+
+
+    </div>
+</div>
+
+<div class="modal fade" id="searchResults">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Search results</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<footer>
+
+
+	<span class="copyright">
+	Created and maintained by <a href="https://github.com/Alorel">Alorel</a>. Source available <a
+            href="https://github.com/Alorel/userscript-utils">here</a>.
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a>
+	
+		on Thursday, 16th June, 2016
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+<script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+<script>
+    $(function () {
+        $("[id*='$']").each(function () {
+            var $this = $(this);
+
+            $this.attr("id", $this.attr("id").replace("$", "__"));
+        });
+
+        $(".tutorial-section pre, .readme-section pre").each(function () {
+            var $this = $(this);
+
+            var example = $this.find("code");
+            exampleText = example.html();
+            var lang = /{@lang (.*?)}/.exec(exampleText);
+            if (lang && lang[1]) {
+                exampleText = exampleText.replace(lang[0], "");
+                example.html(exampleText);
+                lang = lang[1];
+            } else {
+                var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+                lang = langClassMatch ? langClassMatch[1] : "javascript";
+            }
+
+            if (lang) {
+
+                $this
+                        .addClass("sunlight-highlight-" + lang)
+                        .addClass("linenums")
+                        .html(example.html());
+
+            }
+        });
+
+        Sunlight.highlightAll({
+            lineNumbers: true,
+            showMenu: true,
+            enableDoclinks: true
+        });
+
+        $.catchAnchorLinks({
+            navbarOffset: 10
+        });
+        $("#toc").toc({
+            anchorName: function (i, heading, prefix) {
+                var id = $(heading).attr("id");
+                return id && id.replace(/\~/g, '-inner-').replace(/\./g, '-static-') || ( prefix + i );
+            },
+            selectors: "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+            showAndHide: false,
+            smoothScrolling: true
+        });
+
+        $("#main span[id^='toc']").addClass("toc-shim");
+        $('.dropdown-toggle').dropdown();
+
+        $("table").each(function () {
+            var $this = $(this);
+            $this.addClass('table');
+        });
+
+    });
+</script>
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+<script>
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-76993341-1', 'auto');
+    ga('send', 'pageview');
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        SearcherDisplay.init();
+    });
+</script>
+
+</body>
+</html>
