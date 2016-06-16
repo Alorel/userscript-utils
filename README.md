@@ -16,6 +16,7 @@ Useful tools for developing userscripts - in both CLI and API modes (CLI uses as
 		 - [Extracting the entire metadata block](#extracting-the-entire-metadata-block)
 	 - [API examples](#api-examples)
 	 - [Grunt task example](#grunt-task-example)
+ - [Notes before running tests](#notes-before-running-tests)
 
 # Features
 
@@ -79,8 +80,7 @@ Requires node version `>=0.12`
 >         -d, --downloadurl   - Include the @downloadURL tag in the output
 
 ## API usage
-
-[todo: inc link]
+See [generated JSDoc](https://cdn.rawgit.com/Alorel/userscript-utils/1.0.0-beta.1/docs/index.html).
 
 # Examples
 ## CLI examples
@@ -120,3 +120,6 @@ userscript-utils get-metablock -i foo.user.js -o foo.big.meta.js;
 ## Grunt task example
 
 [todo]
+
+# Notes before running tests
+If you cloned this repository and want to run tests be sure to run `npm link` beforehand otherwise you'll get errors!
