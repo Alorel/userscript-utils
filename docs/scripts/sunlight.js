@@ -54,12 +54,12 @@
 		}
 
 		return {
-			handleToken: function (context) {
+			handleToken: function (context) { 
 				return defaultHandleToken(context.tokens[context.index].name)(context); 
 			},
 
 			//just append default content as a text node
-			handle_default: function (context) {
+			handle_default: function (context) { 
 				return context.addNode(context.createTextNode(context.tokens[context.index])); 
 			},
 
@@ -484,7 +484,7 @@
 
 	function defaultNumberParser(context) {
 		var current = context.reader.current(),
-			number,
+			number, 
 			line = context.reader.getLine(), 
 			column = context.reader.getColumn(),
 			allowDecimal = true,

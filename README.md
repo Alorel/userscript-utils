@@ -21,7 +21,7 @@ Useful tools for developing userscripts - in both CLI and API modes (CLI uses as
 	 - [API examples](#api-examples)
 	     - [Extracting the .meta.js metablock and writing it to a new file](#extracting-the-metajs-metablock-and-writing-it-to-a-new-file)
 	     - [Extracting the full metadata block](#extracting-the-full-metadata-block)
-	     - [Combining with UglifyJS](#extracting-the-full-metadata-block)
+	     - [Combining with UglifyJS](#combining-with-uglifyjs)
 	 - [Grunt task example](#grunt-task-example)
  - [Notes before running tests](#notes-before-running-tests)
 
@@ -87,7 +87,7 @@ Requires node version `>=0.12`
 >         -d, --downloadurl   - Include the @downloadURL tag in the output
 
 ## API usage
-See [generated JSDoc](https://cdn.rawgit.com/Alorel/userscript-utils/1.0.0/docs/index.html).
+See [generated JSDoc](https://cdn.rawgit.com/Alorel/userscript-utils/1.0.1/docs/index.html).
 
 # Examples
 ## CLI examples
