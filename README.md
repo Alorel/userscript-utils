@@ -15,6 +15,9 @@ Useful tools for developing userscripts - in both CLI and API modes (CLI uses as
 		 - [Creating a .meta.js file from a .user.js file](#creating-a-metajs-file-from-a-userjs-file)
 		 - [Extracting the entire metadata block](#extracting-the-entire-metadata-block)
 	 - [API examples](#api-examples)
+	     - [Extracting the .meta.js metablock and writing it to a new file](#extracting-the-metajs-metablock-and-writing-it-to-a-new-file)
+	     - [Extracting the full metadata block](#extracting-the-full-metadata-block)
+	     - [Combining with UglifyJS](#extracting-the-full-metadata-block)
 	 - [Grunt task example](#grunt-task-example)
  - [Notes before running tests](#notes-before-running-tests)
 
@@ -203,10 +206,70 @@ try {
     //handle
 }
 ```
+### Combining with [UglifyJS](https://www.npmjs.com/package/uglify-js)
+```js
+var utils = require('userscript-utils'),
+    minify = require('uglify-js').minify,
+    fs = require('fs'),
+    inFile = "foo.user.js",
+    outFile = "foo.min.user.js";
 
+//Get our metablock
+utils.getMetablock.fromFile(inFile, function (e, metablock) {
+    if (e) {
+        throw e;
+    } else {
+        // Minify the JS
+        var minified = minify(inFile).code;
+
+        //Open our file for writing
+        fs.open(outFile, 'w', function (e, fd) {
+            if (e) {
+                throw e;
+            } else {
+                //Write our file
+                fs.write(fd, metablock + "\n" + minified, function (e) {
+                    try {
+                        if (e) {
+                            throw e;
+                        }
+                    } finally {
+                        fs.close(fd, function (e) {
+                            if (e) {
+                                throw e;
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+});
+```
 ## Grunt task example
+You'll need [grunt-run](https://www.npmjs.com/package/grunt-run):
+```sh
+npm i --save-dev grunt-run;
+```
+Add a `run` task to your `Gruntfile.js` under any name (e.g. *foo*) containing a CLI command to execute, e.g.:
+```js
+module.exports = function (grunt) {
+    // Initializing configuration objects
+    grunt.initConfig({
+        run: {
+            foo: {
+                exec: 'userscript-utils get-updateblock -i foo.user.js -o foo.meta.js'
+            }
+        }
+    });
 
-[todo]
+    grunt.loadNpmTasks('grunt-run');
+};
+```
+Run the task:
+```sh
+grunt run:foo;
+```
 
 # Notes before running tests
 If you cloned this repository and want to run tests be sure to run `npm link` beforehand otherwise you'll get errors!
