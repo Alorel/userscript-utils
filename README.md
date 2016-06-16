@@ -114,8 +114,95 @@ userscript-utils get-metablock -i foo.user.js -o foo.big.meta.js;
 ```
 
 ## API examples
+### Extracting the `.meta.js` metablock and writing it to a new file:
+```js
+var utils = require('userscript-utils').getUpdateMetablock,
+    fs = require('fs'),
+    inputFile = "foo.user.js",
+    outputFile = "foo.meta.js",
+//For fs.writeFile
+    innerCallback = function (e) {
+        if (e) {
+            throw e;
+        }
+    },
+//For userscript-utils
+    outerCallback = function (e, o) {
+        if (e) {
+            throw e;
+        } else {
+            fs.writeFile(outputFile, o, 'utf8', innerCallback);
+        }
+    };
 
-[todo]
+//Bare minimum
+utils.fromFile(inputFile, outerCallback);
+
+//Include @updateURL
+utils.fromFile(inputFile, outerCallback, true);
+
+//Include @downloadURL
+utils.fromFile(inputFile, outerCallback, false, true);
+
+//Include @updateURL @downloadURL
+utils.fromFile(inputFile, outerCallback, true, true);
+
+// For synchronous mode simply omit the callback argument and replate the method with "fromFileSync":
+try {
+    utils.fromFileSync(inputFile);
+} catch (e) {
+    //handle
+}
+
+//And you can just as easily do the same if you have the file contents as a string:
+utils.fromString(stringContainingFileContents, outerCallback);
+
+try {
+    utils.fromStringSync(stringContainingFileContents);
+} catch (e) {
+    //handle
+}
+```
+### Extracting the full metadata block
+```js
+var utils = require('userscript-utils').getMetablock,
+    fs = require('fs'),
+    inputFile = "foo.user.js",
+    outputFile = "foo.meta.js",
+//For fs.writeFile
+    innerCallback = function (e) {
+        if (e) {
+            throw e;
+        }
+    },
+//For userscript-utils
+    outerCallback = function (e, o) {
+        if (e) {
+            throw e;
+        } else {
+            fs.writeFile(outputFile, o, 'utf8', innerCallback);
+        }
+    };
+
+//Async
+utils.fromFile(inputFile, outerCallback);
+
+// Sync
+try {
+    utils.fromFileSync(inputFile);
+} catch (e) {
+    //handle
+}
+
+//And you can just as easily do the same if you have the file contents as a string:
+utils.fromString(stringContainingFileContents, outerCallback);
+
+try {
+    utils.fromStringSync(stringContainingFileContents);
+} catch (e) {
+    //handle
+}
+```
 
 ## Grunt task example
 
