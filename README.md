@@ -8,8 +8,6 @@ Useful tools for developing userscripts - in both CLI and API modes (CLI uses as
 
 # Table of Contents
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/Alorel/userscript-utils.svg)](https://greenkeeper.io/)
-
  - [Features](#features)
  - [Installation](#installation)
  - [Compatibility](#compatibility)
