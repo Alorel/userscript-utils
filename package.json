@@ -47,8 +47,8 @@
   "devDependencies": {
     "ink-docstrap": "^1.1",
     "jsdoc": "^3.4",
-    "chai": "^3.5",
+    "chai": "^4.1.2",
     "rimraf": "^2.5",
-    "mocha": "^2.5"
+    "mocha": "^4.0.0"
   }
 }
