@@ -1,8 +1,5 @@
 language: node_js
-
-os:
-  - linux
-  - osx
+sudo: false
 
 node_js:
   - 8
@@ -14,17 +11,6 @@ node_js:
 cache:
   directories:
     - node_modules
-    - ~/.npm
-    - ~/.nvm
 
 before_script: npm link
-script:
-  - npm test
-  - npm prune
-
-notifications:
-  on_success: change
-  on_failure: always
-
-matrix:
-  fast_finish: true
+script: npm test
