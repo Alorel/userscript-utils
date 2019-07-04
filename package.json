@@ -7,7 +7,9 @@
     "test": "mocha test -c --recursive",
     "jsdoc": "rimraf ./docs && jsdoc -d ./docs -t ./node_modules/ink-docstrap/template -r -R ./README.md -c ./.jsdoc.json ./src/lib ./src/index.js",
     "test-watch": "mocha test --recursive -w -R min",
-    "test-min": "mocha test --recursive -R progress"
+    "test-min": "mocha test --recursive -R progress",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "engines": {
     "node": ">=0.12"
@@ -24,7 +26,8 @@
   "dependencies": {
     "async": "^2.0.0-alpha.0",
     "minimist": "^1.0",
-    "get-stdin": "^5.0"
+    "get-stdin": "^5.0",
+    "snyk": "^1.189.0"
   },
   "author": {
     "name": "Alorel",
@@ -50,5 +53,6 @@
     "chai": "^4.1.2",
     "rimraf": "^2.5",
     "mocha": "^4.0.0"
-  }
+  },
+  "snyk": true
 }
