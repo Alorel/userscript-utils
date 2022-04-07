@@ -22,7 +22,7 @@
     "utilities"
   ],
   "dependencies": {
-    "async": "^2.0.0-alpha.0",
+    "async": "^3.2.2",
     "minimist": "^1.0",
     "get-stdin": "^5.0"
   },
